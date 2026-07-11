@@ -232,3 +232,83 @@ video.addEventListener("pause",()=>{
     controls.style.opacity="1";
 
 });
+
+const title=document.getElementById("videoTitle");
+
+function updateTitle(url){
+
+    try{
+
+        let name=url.split("/").pop();
+
+        name=decodeURIComponent(name);
+
+        title.innerHTML=name;
+
+    }catch{
+
+        title.innerHTML="Unknown Video";
+
+    }
+
+}
+
+loadBtn.onclick=()=>{
+
+    if(urlInput.value){
+
+        video.src=urlInput.value;
+
+        updateTitle(urlInput.value);
+
+        video.load();
+
+        video.play();
+
+    }
+
+};
+
+if(url){
+
+    updateTitle(url);
+
+}
+
+const audio=document.getElementById("audioTrack");
+
+video.addEventListener("loadedmetadata",()=>{
+
+    audio.innerHTML="";
+
+    if(video.audioTracks){
+
+        for(let i=0;i<video.audioTracks.length;i++){
+
+            let option=document.createElement("option");
+
+            option.value=i;
+
+            option.text=video.audioTracks[i].label || ("Track "+(i+1));
+
+            audio.appendChild(option);
+
+        }
+
+    }
+
+});
+
+audio.onchange=()=>{
+
+    if(video.audioTracks){
+
+        for(let i=0;i<video.audioTracks.length;i++){
+
+            video.audioTracks[i].enabled=(i==audio.value);
+
+        }
+
+    }
+
+};
