@@ -61,37 +61,30 @@ placeholder="Paste your MP4 or HLS (.m3u8) URL here">
 
 <script>
 
-const player=new Plyr('#player');
-
-const player = new Plyr('#video-player');
+const player = new Plyr('#player');
 
 const params = new URLSearchParams(window.location.search);
 const videoUrl = params.get("video");
 
 if (videoUrl) {
-    const video = document.getElementById("video-player");
+    const video = document.getElementById("player");
 
     video.src = decodeURIComponent(videoUrl);
 
     video.load();
 
     video.play().catch(() => {
-        console.log("Autoplay blocked by browser");
+        console.log("Autoplay blocked");
     });
 }
-    
-    function playVideo(){
 
-const url=document.getElementById("url").value;
+function playVideo() {
+    const url = document.getElementById("url").value;
+    const video = document.getElementById("player");
 
-const video=document.getElementById("player");
-
-video.src=url;
-
-video.load();
-
-video.play();
-
+    video.src = url;
+    video.load();
+    video.play();
 }
 
 </script>
