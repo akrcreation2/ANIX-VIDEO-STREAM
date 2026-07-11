@@ -39,61 +39,31 @@ video{
 }
     .logo{
     text-align:center;
-    font-size:48px;
-    font-weight:900;
-    text-transform:uppercase;
-    letter-spacing:6px;
-    font-family:'Arial Black',sans-serif;
-    background:linear-gradient(
-        90deg,
-        #ff0000,
-        #ff0077,
-        #9d00ff,
-        #6f00ff,
-        #ff0000
-    );
-    background-size:400%;
+    font-size:42px;
+    font-weight:800;
+    font-family:'Poppins',sans-serif;
+    letter-spacing:2px;
+    margin-bottom:25px;
+
+    background:linear-gradient(90deg,#ff2d55,#8b5cf6,#ff2d55);
+    background-size:200% auto;
+
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 
-    animation:
-        gradientMove 6s linear infinite,
-        glow 1.5s ease-in-out infinite alternate,
-        float 4s ease-in-out infinite;
+    animation:shine 4s linear infinite;
+
+    text-shadow:
+        0 0 10px rgba(255,45,85,.4),
+        0 0 20px rgba(139,92,246,.4);
 }
 
-@keyframes gradientMove{
-    0%{background-position:0%;}
-    100%{background-position:400%;}
-}
-
-@keyframes glow{
+@keyframes shine{
     from{
-        filter:
-        drop-shadow(0 0 5px #ff0055)
-        drop-shadow(0 0 10px #ff0055)
-        drop-shadow(0 0 20px #a200ff);
+        background-position:0%;
     }
-
     to{
-        filter:
-        drop-shadow(0 0 15px #ff0055)
-        drop-shadow(0 0 30px #ff0055)
-        drop-shadow(0 0 60px #9d00ff);
-    }
-}
-
-@keyframes float{
-    0%{
-        transform:translateY(0px) scale(1);
-    }
-
-    50%{
-        transform:translateY(-3px) scale(1.02);
-    }
-
-    100%{
-        transform:translateY(0px) scale(1);
+        background-position:200%;
     }
 }
 </style>
@@ -104,9 +74,9 @@ video{
 <div class="container">
 
 <h1 class="logo">
-    ANiX <span>ViDEO STREAM</span>
+ANiX <b>ViDEO STREAM</b>
 </h1>
-
+    
 <input
 id="url"
 placeholder="Paste your MP4 or HLS (.m3u8) URL here">
