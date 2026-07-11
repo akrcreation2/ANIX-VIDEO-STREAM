@@ -175,3 +175,12 @@ video{
     cursor:default;
 
 }
+.video-title{
+    padding:12px 16px;
+    font-size:18px;
+    font-weight:600;
+    color:#fff;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
