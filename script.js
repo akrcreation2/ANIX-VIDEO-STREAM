@@ -115,4 +115,33 @@ function format(time){
 
     return String(min).padStart(2,"0")+":"+String(sec).padStart(2,"0");
 
-}
+};
+
+const volume=document.getElementById("volume");
+const speed=document.getElementById("speed");
+const pip=document.getElementById("pip");
+
+// Volume
+volume.oninput=()=>{
+    video.volume=volume.value;
+};
+
+// Playback Speed
+speed.onchange=()=>{
+    video.playbackRate=parseFloat(speed.value);
+};
+
+// Picture in Picture
+pip.onclick=async()=>{
+
+    if(document.pictureInPictureEnabled){
+
+        try{
+            await video.requestPictureInPicture();
+        }catch(e){
+            console.log(e);
+        }
+
+    }
+
+};
