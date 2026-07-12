@@ -209,4 +209,29 @@ video{
     border-radius:8px;
 }
 
+.subtitle-box{
+display:flex;
+align-items:center;
+gap:10px;
+margin-top:10px;
+}
+
+#subtitleFile{
+color:#fff;
+}
+
+#subtitleToggle{
+background:#ff3b30;
+color:#fff;
+border:none;
+padding:8px 18px;
+border-radius:8px;
+cursor:pointer;
+font-weight:600;
+}
+
+#subtitleToggle:hover{
+background:#ff5f57;
+}
+
 }
