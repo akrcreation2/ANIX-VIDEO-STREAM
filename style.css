@@ -185,109 +185,152 @@ video{
 #speed{
     display:none;
 }
-/* ===================================
+/* ===========================
    SETTINGS PANEL
-=================================== */
+=========================== */
 
-.settings-menu{
+const settingsBtn = document.getElementById("settings");
+const settingsMenu = document.getElementById("settingsMenu");
+const settingsContent = document.getElementById("settingsContent");
 
-    position:absolute;
+const tabSpeed = document.getElementById("tabSpeed");
+const tabAudio = document.getElementById("tabAudio");
+const tabSubtitle = document.getElementById("tabSubtitle");
+const closeSettings = document.getElementById("closeSettings");
 
-    right:15px;
+settingsBtn.onclick = () => {
+    settingsMenu.style.display = "block";
+    showSpeed();
+};
 
-    bottom:85px;
+closeSettings.onclick = () => {
+    settingsMenu.style.display = "none";
+};
 
-    width:250px;
+function activeTab(tab){
+    document.querySelectorAll(".tab").forEach(t=>{
+        t.classList.remove("active");
+    });
+    tab.classList.add("active");
+}
 
-    background:#111;
+/* ---------- SPEED ---------- */
 
-    border-radius:14px;
+function showSpeed(){
 
-    overflow:hidden;
+    activeTab(tabSpeed);
 
-    display:none;
+    settingsContent.innerHTML=`
+        <div class="setting-list">
 
-    z-index:500;
+            <div class="setting-item" data-speed="0.25">0.25x</div>
+            <div class="setting-item" data-speed="0.5">0.5x</div>
+            <div class="setting-item" data-speed="0.75">0.75x</div>
+            <div class="setting-item active-speed" data-speed="1">• 1x</div>
+            <div class="setting-item" data-speed="1.25">1.25x</div>
+            <div class="setting-item" data-speed="1.5">1.5x</div>
+            <div class="setting-item" data-speed="2">2x</div>
 
-    box-shadow:0 10px 30px rgba(0,0,0,.55);
+        </div>
+    `;
 
-    animation:popup .25s ease;
+    document.querySelectorAll(".setting-item").forEach(item=>{
+
+        item.onclick=()=>{
+
+            document.querySelectorAll(".setting-item")
+            .forEach(i=>i.classList.remove("active-speed"));
+
+            item.classList.add("active-speed");
+
+            player.playbackRate=parseFloat(item.dataset.speed);
+
+        };
+
+    });
 
 }
 
-.settings-menu.active{
-    display:block;
-}
+/* ---------- AUDIO ---------- */
 
-@keyframes popup{
+function showAudio(){
 
-    from{
-        opacity:0;
-        transform:translateY(15px);
+    activeTab(tabAudio);
+
+    let html='<div class="setting-list">';
+
+    if(player.audioTracks && player.audioTracks.length){
+
+        for(let i=0;i<player.audioTracks.length;i++){
+
+            html+=`
+            <div class="setting-item"
+            onclick="selectAudio(${i})">
+            Audio ${i+1}
+            </div>
+            `;
+
+        }
+
+    }else{
+
+        html+=`
+        <div class="setting-item">
+        No Audio Tracks
+        </div>
+        `;
+
     }
 
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    html+='</div>';
+
+    settingsContent.innerHTML=html;
 
 }
 
-.settings-header{
+/* ---------- SUBTITLE ---------- */
 
-    padding:14px 18px;
+function showSubtitle(){
 
-    font-size:17px;
+    activeTab(tabSubtitle);
 
-    font-weight:600;
+    settingsContent.innerHTML=`
 
-    border-bottom:1px solid #222;
+    <div class="setting-list">
 
-}
+        <label class="setting-item">
 
-.settings-item{
+            Load Subtitle (.vtt)
 
-    display:flex;
+            <input
+            type="file"
+            id="subtitleFile"
+            accept=".vtt"
+            hidden>
 
-    justify-content:space-between;
+        </label>
 
-    align-items:center;
+        <div
+        class="setting-item"
+        id="disableSubtitle">
 
-    padding:15px 18px;
+        Disable Subtitle
 
-    cursor:pointer;
+        </div>
 
-    transition:.2s;
+    </div>
 
-}
-
-.settings-item:hover{
-
-    background:#1d1d1d;
-
-}
-
-.settings-item i{
-
-    color:#1ea5ff;
-
-    width:24px;
+    `;
 
 }
 
-.settings-item span{
+/* ---------- TAB CLICK ---------- */
 
-    flex:1;
+tabSpeed.onclick=showSpeed;
 
-    margin-left:10px;
+tabAudio.onclick=showAudio;
 
-}
-
-.settings-item small{
-
-    color:#aaa;
-
-}
+tabSubtitle.onclick=showSubtitle;
 
 /* ===================================
    SUB MENU
