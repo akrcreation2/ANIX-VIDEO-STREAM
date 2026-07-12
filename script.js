@@ -485,15 +485,16 @@ await video.play();
 
 title.innerText =
 url.split("/").pop();
-
+player.addEventListener("error", (event) => {
+    console.error("Shaka Error:", event.detail);
+    alert("Shaka Error Code: " + event.detail.code);
+});
+  
 loadAudioTracks();
 
-}catch(err){
-
-console.error(err);
-
-alert("Video Load Failed");
-
+catch(err){
+    console.error(err);
+    alert(err.message || JSON.stringify(err));
 }
 
 };
