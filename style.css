@@ -255,5 +255,45 @@ video{
     width:100%;
 }
 
+html,
+body{
+    width:100%;
+    overflow-x:hidden;
+}
+
+.app{
+    width:100%;
+    max-width:100vw;
+}
+
+.player-box{
+    width:100%;
+}
+
+.controls{
+    width:100%;
+    display:flex;
+    flex-wrap:nowrap;
+    justify-content:space-between;
+    align-items:center;
+    overflow-x:auto;
+    overflow-y:hidden;
+    white-space:nowrap;
+    gap:8px;
+}
+
+.controls::-webkit-scrollbar{
+    display:none;
+}
+
+.settings-menu{
+    position:fixed;
+    right:10px;
+    bottom:90px;
+    width:220px;
+    max-width:calc(100vw - 20px);
+    z-index:9999;
+}
+    
 }
 
