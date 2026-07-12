@@ -351,3 +351,88 @@ closeSettings.addEventListener("click", () => {
 
 });
 
+/* ===========================
+   AUDIO TRACKS
+=========================== */
+
+const audioTrack = document.getElementById("audioTrack");
+
+function loadAudioTracks(){
+
+const tracks = player.audioTracks;
+
+audioTrack.innerHTML = "";
+
+if(!tracks || tracks.length===0){
+
+const op=document.createElement("option");
+op.text="Default Audio";
+audioTrack.appendChild(op);
+
+return;
+}
+
+for(let i=0;i<tracks.length;i++){
+
+const option=document.createElement("option");
+
+option.value=i;
+
+option.text=
+tracks[i].label ||
+tracks[i].language ||
+`Track ${i+1}`;
+
+audioTrack.appendChild(option);
+
+}
+
+audioTrack.onchange=()=>{
+
+for(let i=0;i<tracks.length;i++){
+
+tracks[i].enabled=(i==audioTrack.value);
+
+}
+
+};
+
+}
+
+player.addEventListener("loadedmetadata",loadAudioTracks);
+
+
+/* ===========================
+   SUBTITLE SUPPORT
+=========================== */
+
+const subtitleInput=document.getElementById("subtitleFile");
+
+const subtitleTrack=document.getElementById("subtitleTrack");
+
+const subtitleToggle=document.getElementById("subtitleToggle");
+
+subtitleInput.addEventListener("change",e=>{
+
+const file=e.target.files[0];
+
+if(!file) return;
+
+subtitleTrack.src=URL.createObjectURL(file);
+
+subtitleTrack.track.mode="showing";
+
+});
+
+subtitleToggle.onclick=()=>{
+
+const track=subtitleTrack.track;
+
+track.mode=
+track.mode==="showing"
+?
+"hidden"
+:
+"showing";
+
+};
