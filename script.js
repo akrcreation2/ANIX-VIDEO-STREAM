@@ -199,11 +199,13 @@ volumeSlider.oninput = () => {
 
 /* ---------- FULLSCREEN ---------- */
 
+const playerBox = document.querySelector(".player-box");
+
 fullscreenBtn.onclick = () => {
 
     if (!document.fullscreenElement) {
 
-        player.requestFullscreen();
+        playerBox.requestFullscreen();
 
     } else {
 
