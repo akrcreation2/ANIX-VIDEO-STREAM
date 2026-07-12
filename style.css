@@ -185,152 +185,161 @@ video{
 #speed{
     display:none;
 }
-/* ===========================
+/* ==========================
    SETTINGS PANEL
-=========================== */
+========================== */
 
-const settingsBtn = document.getElementById("settings");
-const settingsMenu = document.getElementById("settingsMenu");
-const settingsContent = document.getElementById("settingsContent");
+.settings-menu{
 
-const tabSpeed = document.getElementById("tabSpeed");
-const tabAudio = document.getElementById("tabAudio");
-const tabSubtitle = document.getElementById("tabSubtitle");
-const closeSettings = document.getElementById("closeSettings");
+position:absolute;
+left:0;
+right:0;
+bottom:0;
 
-settingsBtn.onclick = () => {
-    settingsMenu.style.display = "block";
-    showSpeed();
-};
+height:75%;
 
-closeSettings.onclick = () => {
-    settingsMenu.style.display = "none";
-};
+background:#232323;
 
-function activeTab(tab){
-    document.querySelectorAll(".tab").forEach(t=>{
-        t.classList.remove("active");
-    });
-    tab.classList.add("active");
-}
+display:none;
 
-/* ---------- SPEED ---------- */
+z-index:999;
 
-function showSpeed(){
+border-radius:18px 18px 0 0;
 
-    activeTab(tabSpeed);
+overflow:hidden;
 
-    settingsContent.innerHTML=`
-        <div class="setting-list">
-
-            <div class="setting-item" data-speed="0.25">0.25x</div>
-            <div class="setting-item" data-speed="0.5">0.5x</div>
-            <div class="setting-item" data-speed="0.75">0.75x</div>
-            <div class="setting-item active-speed" data-speed="1">• 1x</div>
-            <div class="setting-item" data-speed="1.25">1.25x</div>
-            <div class="setting-item" data-speed="1.5">1.5x</div>
-            <div class="setting-item" data-speed="2">2x</div>
-
-        </div>
-    `;
-
-    document.querySelectorAll(".setting-item").forEach(item=>{
-
-        item.onclick=()=>{
-
-            document.querySelectorAll(".setting-item")
-            .forEach(i=>i.classList.remove("active-speed"));
-
-            item.classList.add("active-speed");
-
-            player.playbackRate=parseFloat(item.dataset.speed);
-
-        };
-
-    });
+animation:slideUp .25s ease;
 
 }
 
-/* ---------- AUDIO ---------- */
+@keyframes slideUp{
 
-function showAudio(){
+from{
+transform:translateY(100%);
+}
 
-    activeTab(tabAudio);
-
-    let html='<div class="setting-list">';
-
-    if(player.audioTracks && player.audioTracks.length){
-
-        for(let i=0;i<player.audioTracks.length;i++){
-
-            html+=`
-            <div class="setting-item"
-            onclick="selectAudio(${i})">
-            Audio ${i+1}
-            </div>
-            `;
-
-        }
-
-    }else{
-
-        html+=`
-        <div class="setting-item">
-        No Audio Tracks
-        </div>
-        `;
-
-    }
-
-    html+='</div>';
-
-    settingsContent.innerHTML=html;
+to{
+transform:translateY(0);
+}
 
 }
 
-/* ---------- SUBTITLE ---------- */
+.settings-header{
 
-function showSubtitle(){
+height:70px;
 
-    activeTab(tabSubtitle);
+background:#1d1d1d;
 
-    settingsContent.innerHTML=`
+display:flex;
 
-    <div class="setting-list">
+align-items:center;
 
-        <label class="setting-item">
+justify-content:space-between;
 
-            Load Subtitle (.vtt)
+padding:0 18px;
 
-            <input
-            type="file"
-            id="subtitleFile"
-            accept=".vtt"
-            hidden>
-
-        </label>
-
-        <div
-        class="setting-item"
-        id="disableSubtitle">
-
-        Disable Subtitle
-
-        </div>
-
-    </div>
-
-    `;
+border-bottom:1px solid #333;
 
 }
 
-/* ---------- TAB CLICK ---------- */
+.tabs{
 
-tabSpeed.onclick=showSpeed;
+display:flex;
 
-tabAudio.onclick=showAudio;
+align-items:center;
 
-tabSubtitle.onclick=showSubtitle;
+gap:26px;
+
+}
+
+.tab{
+
+width:42px;
+height:42px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:24px;
+
+color:#d8d8d8;
+
+cursor:pointer;
+
+border-bottom:3px solid transparent;
+
+transition:.2s;
+
+}
+
+.tab.active{
+
+color:#2fa9ff;
+
+border-bottom:3px solid #2fa9ff;
+
+}
+
+.close-settings{
+
+font-size:34px;
+
+cursor:pointer;
+
+color:#fff;
+
+}
+
+.settings-content{
+
+height:calc(100% - 70px);
+
+overflow-y:auto;
+
+}
+
+.setting-list{
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+.setting-item{
+
+padding:22px 30px;
+
+font-size:30px;
+
+color:#e6e6e6;
+
+cursor:pointer;
+
+transition:.15s;
+
+}
+
+.setting-item:hover{
+
+background:#333;
+
+}
+
+.active-speed{
+
+color:#2fa9ff;
+
+font-weight:600;
+
+}
+
+.setting-item input{
+
+display:none;
+
+}
 
 /* ===================================
    SUB MENU
@@ -569,163 +578,6 @@ video{
 
     padding:12px;
 
-}
-
-/* ==========================
-   SETTINGS PANEL
-========================== */
-
-.settings-menu{
-
-position:absolute;
-left:0;
-right:0;
-bottom:0;
-
-height:75%;
-
-background:#232323;
-
-display:none;
-
-z-index:999;
-
-border-radius:18px 18px 0 0;
-
-overflow:hidden;
-
-animation:slideUp .25s ease;
-
-}
-
-@keyframes slideUp{
-
-from{
-transform:translateY(100%);
-}
-
-to{
-transform:translateY(0);
-}
-
-}
-
-.settings-header{
-
-height:70px;
-
-background:#1d1d1d;
-
-display:flex;
-
-align-items:center;
-
-justify-content:space-between;
-
-padding:0 18px;
-
-border-bottom:1px solid #333;
-
-}
-
-.tabs{
-
-display:flex;
-
-align-items:center;
-
-gap:26px;
-
-}
-
-.tab{
-
-width:42px;
-height:42px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-font-size:24px;
-
-color:#d8d8d8;
-
-cursor:pointer;
-
-border-bottom:3px solid transparent;
-
-transition:.2s;
-
-}
-
-.tab.active{
-
-color:#2fa9ff;
-
-border-bottom:3px solid #2fa9ff;
-
-}
-
-.close-settings{
-
-font-size:34px;
-
-cursor:pointer;
-
-color:#fff;
-
-}
-
-.settings-content{
-
-height:calc(100% - 70px);
-
-overflow-y:auto;
-
-}
-
-.setting-list{
-
-display:flex;
-
-flex-direction:column;
-
-}
-
-.setting-item{
-
-padding:22px 30px;
-
-font-size:30px;
-
-color:#e6e6e6;
-
-cursor:pointer;
-
-transition:.15s;
-
-}
-
-.setting-item:hover{
-
-background:#333;
-
-}
-
-.active-speed{
-
-color:#2fa9ff;
-
-font-weight:600;
-
-}
-
-.setting-item input{
-
-display:none;
-
-}
 }
 
 /* ===================================
