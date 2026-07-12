@@ -1,27 +1,19 @@
-/* ===================================
-   ANIX VIDEO STREAM PLAYER
-   PART 1
-=================================== */
-
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
 }
 
-html,
 body{
-    width:100%;
-    height:100%;
     background:#000;
-    font-family:'Poppins',sans-serif;
     color:#fff;
+    font-family:'Poppins',sans-serif;
     overflow-x:hidden;
 }
 
 .app{
     width:100%;
-    min-height:100vh;
+    height:100vh;
     background:#000;
 }
 
@@ -32,614 +24,236 @@ body{
 .player-box{
     position:relative;
     width:100%;
+    height:100vh;
     background:#000;
     overflow:hidden;
 }
 
 video{
     width:100%;
-    height:auto;
-    display:block;
+    height:100%;
+    object-fit:contain;
     background:#000;
 }
 
 .video-title{
     position:absolute;
-    top:18px;
+    top:15px;
     left:18px;
-    z-index:20;
-    padding:8px 14px;
-    border-radius:8px;
-    background:rgba(0,0,0,.45);
-    backdrop-filter:blur(10px);
-    font-size:16px;
+    z-index:50;
+    font-size:18px;
     font-weight:600;
+    text-shadow:0 2px 10px rgba(0,0,0,.8);
 }
 
 .controls{
-
     position:absolute;
-
     left:0;
-
     right:0;
-
     bottom:0;
-
+    padding:15px 18px;
     display:flex;
-
     align-items:center;
-
     gap:12px;
-
-    padding:14px;
-
-    background:linear-gradient(
-        transparent,
-        rgba(0,0,0,.95)
-    );
-
-    z-index:100;
-
+    background:linear-gradient(to top,rgba(0,0,0,.8),transparent);
+    z-index:40;
 }
 
 .controls button{
-
     background:none;
-
     border:none;
-
-    color:#1ea5ff;
-
+    color:#fff;
     cursor:pointer;
-
-    transition:.25s;
-
-}
-
-.controls button:hover{
-
-    color:#5fc6ff;
-
 }
 
 .icon-btn{
-
     width:42px;
-
     height:42px;
-
+    border-radius:50%;
     display:flex;
-
-    justify-content:center;
-
     align-items:center;
-
+    justify-content:center;
     font-size:22px;
-
-    position:relative;
-
 }
 
 .play-btn{
-
-    width:64px;
-
-    height:64px;
-
+    width:58px;
+    height:58px;
+    border-radius:50%;
     display:flex;
-
-    justify-content:center;
-
     align-items:center;
-
-    font-size:46px;
-
-}
-
-.icon-btn span{
-
-    position:absolute;
-
-    left:50%;
-
-    top:50%;
-
-    transform:translate(-50%,-45%);
-
-    font-size:10px;
-
-    font-weight:600;
-
+    justify-content:center;
+    font-size:34px;
 }
 
 #seek{
-
     flex:1;
-
     height:5px;
-
     accent-color:#1ea5ff;
-
-    cursor:pointer;
-
 }
 
 .time{
-
-    min-width:95px;
-
+    min-width:100px;
     text-align:center;
-
     font-size:14px;
-
     font-weight:500;
-
-    color:#1ea5ff;
-
-    white-space:nowrap;
-
 }
 
-#volume,
-#speed{
+#volume{
     display:none;
 }
-/* ==========================
-   SETTINGS PANEL
-========================== */
 
-.settings-menu{
-
-position:absolute;
-left:0;
-right:0;
-bottom:0;
-
-height:75%;
-
-background:#232323;
-
-display:none;
-
-z-index:999;
-
-border-radius:18px 18px 0 0;
-
-overflow:hidden;
-
-animation:slideUp .25s ease;
-
-}
-
-@keyframes slideUp{
-
-from{
-transform:translateY(100%);
-}
-
-to{
-transform:translateY(0);
-}
-
-}
-
-.settings-header{
-
-height:70px;
-
-background:#1d1d1d;
-
-display:flex;
-
-align-items:center;
-
-justify-content:space-between;
-
-padding:0 18px;
-
-border-bottom:1px solid #333;
-
-}
-
-.tabs{
-
-display:flex;
-
-align-items:center;
-
-gap:26px;
-
-}
-
-.tab{
-
-width:42px;
-height:42px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-font-size:24px;
-
-color:#d8d8d8;
-
-cursor:pointer;
-
-border-bottom:3px solid transparent;
-
-transition:.2s;
-
-}
-
-.tab.active{
-
-color:#2fa9ff;
-
-border-bottom:3px solid #2fa9ff;
-
-}
-
-.close-settings{
-
-font-size:34px;
-
-cursor:pointer;
-
-color:#fff;
-
-}
-
-.settings-content{
-
-height:calc(100% - 70px);
-
-overflow-y:auto;
-
-}
-
-.setting-list{
-
-display:flex;
-
-flex-direction:column;
-
-}
-
-.setting-item{
-
-padding:22px 30px;
-
-font-size:30px;
-
-color:#e6e6e6;
-
-cursor:pointer;
-
-transition:.15s;
-
-}
-
-.setting-item:hover{
-
-background:#333;
-
-}
-
-.active-speed{
-
-color:#2fa9ff;
-
-font-weight:600;
-
-}
-
-.setting-item input{
-
-display:none;
-
-}
-
-/* ===================================
-   SUB MENU
-=================================== */
-
-.submenu{
-
+#speed,
+#audioTrack{
     display:none;
-
-    border-top:1px solid #222;
-
 }
-
-.submenu.active{
-
-    display:block;
-
-}
-
-.submenu button{
-
-    width:100%;
-
-    background:none;
-
-    border:none;
-
-    color:#fff;
-
-    padding:14px 18px;
-
-    text-align:left;
-
-    cursor:pointer;
-
-    transition:.2s;
-
-}
-
-.submenu button:hover{
-
-    background:#222;
-
-}
-
-/* ===================================
-   URL BOX
-=================================== */
 
 .url-box{
-
     display:flex;
-
     gap:10px;
-
-    padding:18px;
-
+    padding:15px;
     background:#000;
-
 }
 
 .url-box input{
-
     flex:1;
-
-    height:48px;
-
-    padding:0 15px;
-
-    background:#121212;
-
+    padding:14px;
     border:none;
-
-    border-radius:10px;
-
+    border-radius:8px;
+    background:#111;
     color:#fff;
-
     outline:none;
-
 }
 
 .url-box button{
-
-    height:48px;
-
-    padding:0 22px;
-
+    padding:14px 20px;
     border:none;
-
-    border-radius:10px;
-
+    border-radius:8px;
     background:#1ea5ff;
-
     color:#fff;
-
-    cursor:pointer;
-
     font-weight:600;
-
-}
-
-/* ===================================
-   SUBTITLE
-=================================== */
-
-.subtitle-box{
-
-    display:none;
-
-}
-
-#subtitleFile{
-
-    display:none;
-
-}
-
-#subtitleToggle{
-
-    display:none;
-
-}
-
-/* ===================================
-   MOBILE RESPONSIVE
-=================================== */
-
-@media (max-width:768px){
-
-.player-box{
-    width:100%;
-}
-
-video{
-    width:100%;
-    height:auto;
-}
-
-.video-title{
-    top:10px;
-    left:10px;
-    font-size:13px;
-    padding:6px 10px;
-}
-
-.controls{
-
-    padding:8px;
-
-    gap:6px;
-
-    flex-wrap:nowrap;
-
-    overflow-x:auto;
-
-    scrollbar-width:none;
-
-}
-
-.controls::-webkit-scrollbar{
-    display:none;
-}
-
-.icon-btn{
-
-    width:36px;
-
-    height:36px;
-
-    font-size:18px;
-
-}
-
-.play-btn{
-
-    width:52px;
-
-    height:52px;
-
-    font-size:34px;
-
-}
-
-#seek{
-
-    min-width:90px;
-
-    flex:1;
-
-}
-
-.time{
-
-    min-width:72px;
-
-    font-size:11px;
-
+    cursor:pointer;
 }
 
 .settings-menu{
+    position:absolute;
+    right:15px;
+    bottom:85px;
+    width:260px;
+    background:#161616;
+    border-radius:14px;
+    display:none;
+    overflow:hidden;
+    box-shadow:0 0 20px rgba(0,0,0,.5);
+    z-index:100;
+}
 
+.settings-tabs{
+    display:flex;
+    align-items:center;
+    justify-content:space-around;
+    padding:12px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.settings-tabs .tab{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:50%;
+    background:#222;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+}
+
+.settings-tabs .tab.active{
+    background:#1ea5ff;
+}
+
+#settingsContent{
+    padding:15px;
+}
+
+.settings-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.settings-list button{
+    width:100%;
+    padding:12px 15px;
+    border:none;
+    border-radius:10px;
+    background:#222;
+    color:#fff;
+    font-size:15px;
+    text-align:left;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.settings-list button:hover{
+    background:#333;
+}
+
+.settings-list button.active{
+    background:#1ea5ff;
+}
+
+.subtitle-box{
+    display:none;
+}
+
+.material-symbols-outlined{
+    font-size:26px;
+}
+
+@media(max-width:768px){
+
+.player-box{
+    height:100vh;
+}
+
+.controls{
+    padding:12px;
+    gap:8px;
+}
+
+.icon-btn{
+    width:38px;
+    height:38px;
+    font-size:20px;
+}
+
+.play-btn{
+    width:54px;
+    height:54px;
+    font-size:30px;
+}
+
+.time{
+    font-size:12px;
+    min-width:75px;
+}
+
+.settings-menu{
+    width:230px;
     right:10px;
-
-    left:10px;
-
-    width:auto;
-
-    bottom:72px;
-
+    bottom:75px;
 }
 
 .url-box{
-
     flex-direction:column;
-
-    padding:12px;
-
 }
 
 .url-box input,
 .url-box button{
-
     width:100%;
-
 }
 
 }
 
-/* ===================================
-   TABLET
-=================================== */
-
-@media (min-width:769px) and (max-width:1024px){
-
-.controls{
-
-    padding:12px;
-
-}
-
-/* ===================================
-   DESKTOP
-=================================== */
-
-@media (min-width:1025px){
-
-.player-box{
-
-    max-width:1400px;
-
-    margin:auto;
-
-}
-
-}
-
-/* ===================================
-   SMOOTH EFFECTS
-=================================== */
-
-button,
-input,
-select{
-
-    transition:.25s ease;
-
-}
-
-button:active{
-
-    transform:scale(.95);
-
-}
-
-.url-box button:hover{
-
-    background:#38b6ff;
-
-}
-
-.url-box input:focus{
-
-    outline:2px solid #1ea5ff;
-
-}
-
-/* ===================================
-   HIDE DEFAULT ELEMENTS
-=================================== */
-
-#audioTrack,
-#speed,
-#volume,
-#subtitleFile,
-#subtitleToggle{
-
-    display:none;
-
-}
-
-/* ===================================
-   END
-=================================== */
