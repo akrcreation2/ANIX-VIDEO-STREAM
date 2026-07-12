@@ -702,4 +702,30 @@ color:#fff !important;
 
 }
 
+.player-box:fullscreen{
+
+width:100vw;
+height:100vh;
+background:#000;
+
+}
+
+.player-box:fullscreen .center-controls{
+
+z-index:9999;
+
+}
+
+.player-box:fullscreen .controls{
+
+z-index:9999;
+
+}
+
+.player-box:fullscreen .video-title{
+
+z-index:9999;
+
+}
+
 }
