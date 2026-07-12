@@ -6,181 +6,152 @@
 
 body{
     font-family:'Poppins',sans-serif;
-    background:linear-gradient(180deg,#050816,#08142b,#030712);
-    color:white;
-    min-height:100vh;
+    background:#000;
+    color:#fff;
 }
 
 .app{
-    width:95%;
-    max-width:1100px;
-    margin:30px auto;
+    width:100%;
+    max-width:100%;
 }
 
 .topbar{
-    text-align:center;
-    margin-bottom:25px;
-}
-
-.logo{
-    font-size:42px;
-    font-weight:700;
-    color:#fff;
-    letter-spacing:2px;
+    display:none;
 }
 
 .player-box{
     position:relative;
     width:100%;
     background:#000;
-    border-radius:20px;
     overflow:hidden;
-    box-shadow:0 20px 50px rgba(0,0,0,.45);
 }
 
 video{
     width:100%;
     display:block;
-    background:black;
+    background:#000;
+}
+
+.video-title{
+    position:absolute;
+    top:15px;
+    left:20px;
+    z-index:20;
+    font-size:18px;
+    font-weight:600;
+    color:#fff;
 }
 
 .controls{
     position:absolute;
-    bottom:0;
     left:0;
-    width:100%;
-    padding:15px;
+    right:0;
+    bottom:0;
+    padding:18px;
     display:flex;
     align-items:center;
-    gap:12px;
-
-    background:linear-gradient(
-        transparent,
-        rgba(0,0,0,.85)
-    );
+    gap:18px;
+    background:linear-gradient(transparent,rgba(0,0,0,.88));
 }
 
 .controls button{
-    background:#2563eb;
-    color:white;
+    background:none;
     border:none;
-    border-radius:12px;
-    padding:10px 14px;
+    color:#1ea5ff;
     cursor:pointer;
-    font-size:15px;
-    transition:.25s;
+    font-size:28px;
+    transition:.2s;
 }
 
 .controls button:hover{
-    background:#1d4ed8;
+    color:#4fc3ff;
+}
+
+.icon-btn{
+    position:relative;
+}
+
+.icon-btn span{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-45%);
+    font-size:10px;
+    font-weight:600;
+    color:#1ea5ff;
+    pointer-events:none;
+}
+
+.play-btn{
+    font-size:54px !important;
 }
 
 #seek{
     flex:1;
-    accent-color:#3b82f6;
+    height:5px;
+    accent-color:#1ea5ff;
 }
 
 .time{
-    font-size:14px;
-    color:#ddd;
-    min-width:90px;
+    min-width:110px;
     text-align:center;
+    color:#1ea5ff;
+    font-size:15px;
+    font-weight:500;
+}
+
+#volume{
+    display:none;
+}
+
+#speed{
+    display:none;
 }
 
 .url-box{
-    margin-top:25px;
+    padding:20px;
     display:flex;
     gap:10px;
+    background:#000;
 }
 
 .url-box input{
     flex:1;
-    padding:15px;
+    padding:14px;
     border:none;
-    border-radius:14px;
-    background:#111827;
-    color:white;
-    font-size:16px;
     outline:none;
+    border-radius:8px;
+    background:#111;
+    color:#fff;
 }
 
 .url-box button{
-    padding:15px 30px;
+    padding:14px 22px;
     border:none;
-    border-radius:14px;
-    background:#2563eb;
-    color:white;
-    font-size:16px;
+    border-radius:8px;
+    background:#1ea5ff;
+    color:#fff;
     cursor:pointer;
-}
-
-.url-box button:hover{
-    background:#1d4ed8;
 }
 
 @media(max-width:768px){
 
-.logo{
-    font-size:30px;
+.controls{
+    gap:12px;
+    padding:14px;
 }
 
-.controls{
-    flex-wrap:wrap;
+.controls button{
+    font-size:22px;
+}
+
+.play-btn{
+    font-size:44px !important;
 }
 
 .time{
-    width:100%;
+    font-size:13px;
+    min-width:80px;
 }
 
-.url-box{
-    flex-direction:column;
-}
-
-.url-box button{
-    width:100%;
-}
-
-}
-
-#volume{
-    width:90px;
-    accent-color:#3b82f6;
-}
-
-#speed{
-    background:#111827;
-    color:white;
-    border:none;
-    border-radius:10px;
-    padding:8px;
-}
-
-#pip{
-    background:#2563eb;
-    color:white;
-    border:none;
-    border-radius:10px;
-    padding:10px 14px;
-    cursor:pointer;
-}
-
-.controls{
-
-    transition:opacity .35s;
-
-}
-
-.player-box{
-
-    cursor:default;
-
-}
-.video-title{
-    padding:12px 16px;
-    font-size:18px;
-    font-weight:600;
-    color:#fff;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
 }
