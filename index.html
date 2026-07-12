@@ -1,26 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>ANiX Video Stream</title>
 
 <link rel="stylesheet" href="style.css">
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.9.11/shaka-player.compiled.min.js"></script>
 
 </head>
 
@@ -28,17 +24,26 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <div class="app">
 
-<header class="topbar">
-<h1 class="logo">ANiX Video Stream</h1>
-</header>
-
 <div class="player-box">
 
-<div id="videoTitle" class="video-title">
+<div class="video-title" id="videoTitle">
 No Video Loaded
 </div>
 
-<video id="player" playsinline></video>
+<video
+id="player"
+playsinline
+controlslist="nodownload"
+disablepictureinpicture
+crossorigin="anonymous">
+
+<track
+id="subtitleTrack"
+kind="subtitles"
+label="English"
+srclang="en">
+
+</video>
 
 <div class="controls">
 
@@ -57,13 +62,15 @@ No Video Loaded
 </button>
 
 <input
-type="range"
 id="seek"
+type="range"
+min="0"
+max="100"
 value="0">
 
 <div class="time">
 <span id="current">00:00</span>
-<span>/</span>
+/
 <span id="duration">00:00</span>
 </div>
 
@@ -85,26 +92,32 @@ value="0">
 
 </div>
 
-<!-- SETTINGS PANEL -->
-
 <div id="settingsMenu" class="settings-menu">
 
 <div class="settings-tabs">
 
-<button class="tab active" id="tabSpeed">
-<span class="material-symbols-outlined">speed</span>
+<button id="tabSpeed" class="tab active">
+<span class="material-symbols-outlined">
+speed
+</span>
 </button>
 
-<button class="tab" id="tabAudio">
-<span class="material-symbols-outlined">headphones</span>
+<button id="tabAudio" class="tab">
+<span class="material-symbols-outlined">
+headphones
+</span>
 </button>
 
-<button class="tab" id="tabSubtitle">
-<span class="material-symbols-outlined">closed_caption</span>
+<button id="tabSubtitle" class="tab">
+<span class="material-symbols-outlined">
+closed_caption
+</span>
 </button>
 
-<button class="tab close-tab" id="closeSettings">
-<span class="material-symbols-outlined">close</span>
+<button id="closeSettings" class="tab">
+<span class="material-symbols-outlined">
+close
+</span>
 </button>
 
 </div>
@@ -113,52 +126,13 @@ value="0">
 
 </div>
 
-<input
-id="volume"
-type="range"
-min="0"
-max="1"
-step="0.01"
-value="1">
-
-<select id="speed" hidden>
-<option value="0.5">0.5x</option>
-<option value="0.75">0.75x</option>
-<option value="1" selected>Normal</option>
-<option value="1.25">1.25x</option>
-<option value="1.5">1.5x</option>
-<option value="1.75">1.75x</option>
-<option value="2">2x</option>
-</select>
-
-<select id="audioTrack" hidden></select>
-
-<div class="subtitle-box" hidden>
-
-<input
-type="file"
-id="subtitleFile"
-accept=".vtt">
-
-<button id="subtitleToggle">
-CC
-</button>
-
-</div>
-
-<track
-id="subtitleTrack"
-kind="subtitles"
-srclang="en"
-label="Subtitle"
-default>
-
 </div>
 
 <div class="url-box">
 
 <input
 id="url"
+type="text"
 placeholder="Paste MP4 / M3U8 URL">
 
 <button id="load">
@@ -166,6 +140,14 @@ Load Video
 </button>
 
 </div>
+
+<input id="volume" type="range" min="0" max="1" step="0.01" value="1" hidden>
+
+<input id="subtitleFile" type="file" accept=".vtt" hidden>
+
+<select id="speed" hidden></select>
+
+<select id="audioTrack" hidden></select>
 
 </div>
 
