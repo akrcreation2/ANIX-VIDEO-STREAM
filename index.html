@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ANiX Video Stream</title>
+<title>ANiX VIDEO STREAM</title>
 
 <link rel="stylesheet" href="style.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.13.5/shaka-player.compiled.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.9.11/shaka-player.compiled.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 </head>
 
@@ -25,23 +28,31 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <div class="app">
 
+<header class="topbar">
+
+<h1 class="logo">
+<span class="logo-anix">ANiX</span>
+<span class="logo-video">VIDEO</span>
+<span class="logo-stream">STREAM</span>
+</h1>
+
+</header>
+
 <div class="player-box">
 
-<div class="video-title" id="videoTitle">
+<div id="videoTitle" class="video-title">
 No Video Loaded
 </div>
 
 <video
 id="player"
 playsinline
-controlslist="nodownload"
-disablepictureinpicture
-crossorigin="anonymous">
+preload="metadata">
 
 <track
 id="subtitleTrack"
 kind="subtitles"
-label="English"
+label="Subtitle"
 srclang="en">
 
 </video>
@@ -70,9 +81,13 @@ max="100"
 value="0">
 
 <div class="time">
+
 <span id="current">00:00</span>
-/
+
+<span>/</span>
+
 <span id="duration">00:00</span>
+
 </div>
 
 <button id="volumeBtn" class="icon-btn">
@@ -93,48 +108,63 @@ value="0">
 
 </div>
 
+<!-- SETTINGS PANEL -->
+
 <div id="settingsMenu" class="settings-menu">
 
 <div class="settings-tabs">
 
-<button id="tabSpeed" class="tab active">
+<button id="tabSpeed" class="tab active" title="Playback Speed">
+
 <span class="material-symbols-outlined">
 speed
 </span>
+
 </button>
 
-<button id="tabAudio" class="tab">
+<button id="tabAudio" class="tab" title="Audio Tracks">
+
 <span class="material-symbols-outlined">
 headphones
 </span>
+
 </button>
 
-<button id="tabSubtitle" class="tab">
+<button id="tabSubtitle" class="tab" title="Subtitles">
+
 <span class="material-symbols-outlined">
 closed_caption
 </span>
+
 </button>
 
-<button id="closeSettings" class="tab">
+<button id="closeSettings" class="tab close-tab" title="Close">
+
 <span class="material-symbols-outlined">
 close
 </span>
+
 </button>
 
 </div>
 
-<div id="settingsContent"></div>
+<div id="settingsContent">
+
+<!-- Dynamic Content -->
 
 </div>
 
 </div>
+
+</div>
+<!-- player-box END -->
 
 <div class="url-box">
 
 <input
 id="url"
 type="text"
-placeholder="Paste MP4 / M3U8 URL">
+placeholder="Paste MP4 / M3U8 / Direct Video URL">
 
 <button id="load">
 Load Video
@@ -142,9 +172,22 @@ Load Video
 
 </div>
 
-<input id="volume" type="range" min="0" max="1" step="0.01" value="1" hidden>
+<!-- Hidden Controls -->
 
-<input id="subtitleFile" type="file" accept=".vtt" hidden>
+<input
+id="volume"
+type="range"
+min="0"
+max="1"
+step="0.01"
+value="1"
+hidden>
+
+<input
+id="subtitleFile"
+type="file"
+accept=".vtt,.srt"
+hidden>
 
 <select id="speed" hidden></select>
 
@@ -155,4 +198,5 @@ Load Video
 <script src="script.js"></script>
 
 </body>
+
 </html>
