@@ -22,6 +22,10 @@ const audioTrack = document.getElementById("audioTrack");
 const subtitleFile = document.getElementById("subtitleFile");
 const subtitleToggle = document.getElementById("subtitleToggle");
 const subtitleTrack = document.getElementById("subtitleTrack");
+const tabSpeed = document.getElementById("tabSpeed");
+const tabAudio = document.getElementById("tabAudio");
+const tabSubtitle = document.getElementById("tabSubtitle");
+const closeSettings = document.getElementById("closeSettings");
 
 let hls = null;
 let subtitleEnabled = true;
@@ -354,8 +358,10 @@ if(!file)return;
 
 subtitleTrack.src=URL.createObjectURL(file);
 
-player.textTracks[0].mode="showing";
-
+if(player.textTracks.length){
+    player.textTracks[0].mode =
+    subtitleEnabled ? "showing" : "hidden";
+}
 subtitleEnabled=true;
 
 };
