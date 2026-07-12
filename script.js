@@ -58,7 +58,9 @@ const url=urlInput.value.trim();
 
 if(!url) return;
 
-title.innerText=url.split("/").pop();
+title.innerText = decodeURIComponent(
+    url.split("/").pop().split("?")[0]
+);
 
 if(hls){
 
