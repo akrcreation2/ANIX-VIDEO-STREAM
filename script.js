@@ -1,4 +1,4 @@
-const video = document.getElementById("player");
+const player = document.getElementById("player");
 
 const playBtn = document.getElementById("play");
 const rewindBtn = document.getElementById("rewind");
@@ -15,8 +15,10 @@ const volumeSlider = document.getElementById("volume");
 const fullscreenBtn = document.getElementById("fullscreen");
 const pipBtn = document.getElementById("pip");
 
-const loadBtn = document.getElementById("load");
 const urlInput = document.getElementById("url");
+const loadBtn = document.getElementById("load");
+
+const title = document.getElementById("videoTitle");
 
 const settingsBtn = document.getElementById("settings");
 const settingsMenu = document.getElementById("settingsMenu");
@@ -27,146 +29,11 @@ const tabAudio = document.getElementById("tabAudio");
 const tabSubtitle = document.getElementById("tabSubtitle");
 const closeSettings = document.getElementById("closeSettings");
 
-const title = document.getElementById("videoTitle");
 const subtitleTrack = document.getElementById("subtitleTrack");
 const subtitleFile = document.getElementById("subtitleFile");
 
-let player;
-let controlsTimer;
-/* ---------- PLAY / PAUSE ---------- */
-
-playBtn.onclick = ()=>{
-
-if(video.paused){
-
-video.play();
-
-}else{
-
-video.pause();
-
-}
-
-};
-
-video.onplay=()=>{
-
-playBtn.innerHTML=
-'<i class="fa-solid fa-pause"></i>';
-
-};
-
-video.onpause=()=>{
-
-playBtn.innerHTML=
-'<i class="fa-solid fa-play"></i>';
-
-};
-
-/* ---------- SEEK ---------- */
-
-video.addEventListener("loadedmetadata",()=>{
-
-seek.max=video.duration;
-
-duration.textContent=formatTime(video.duration);
-
-});
-
-video.ontimeupdate=()=>{
-
-seek.value=video.currentTime;
-
-current.textContent=formatTime(video.currentTime);
-
-};
-
-seek.oninput=()=>{
-
-video.currentTime=seek.value;
-
-};
-
-/* ---------- REWIND ---------- */
-
-rewindBtn.onclick=()=>{
-
-video.currentTime=Math.max(0,video.currentTime-10);
-
-};
-
-/* ---------- FORWARD ---------- */
-
-forwardBtn.onclick=()=>{
-
-video.currentTime=Math.min(video.duration,video.currentTime+10);
-
-};
-
-/* ---------- VOLUME ---------- */
-
-volumeBtn.onclick=()=>{
-
-volumeSlider.style.display=
-volumeSlider.style.display==="block"
-?"none":"block";
-
-};
-
-volumeSlider.oninput=()=>{
-
-video.volume=volumeSlider.value;
-
-if(video.volume==0){
-
-volumeBtn.innerHTML=
-'<i class="fa-solid fa-volume-xmark"></i>';
-
-}else{
-
-volumeBtn.innerHTML=
-'<i class="fa-solid fa-volume-high"></i>';
-
-}
-
-};
-
-/* ---------- FULLSCREEN ---------- */
-
-fullscreenBtn.onclick=()=>{
-
-if(!document.fullscreenElement){
-
-video.requestFullscreen();
-
-}else{
-
-document.exitFullscreen();
-
-}
-
-};
-
-/* ---------- PiP ---------- */
-
-pipBtn.onclick=async()=>{
-
-if(document.pictureInPictureEnabled){
-
-try{
-
-await video.requestPictureInPicture();
-
-}catch(e){
-
-console.log(e);
-
-}
-
-}
-
-};
-/* ---------- FORMAT TIME ---------- */
+let hls = null;
+let hideTimer;
 
 function formatTime(sec){
 
@@ -177,119 +44,272 @@ const m=Math.floor((sec%3600)/60);
 const s=Math.floor(sec%60);
 
 if(h>0){
+
 return `${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+
 }
 
 return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
 
 }
+loadBtn.onclick=()=>{
+
+const url=urlInput.value.trim();
+
+if(!url) return;
+
+title.innerText=url.split("/").pop();
+
+if(hls){
+
+hls.destroy();
+
+hls=null;
+
+}
+
+if(url.endsWith(".m3u8")){
+
+if(Hls.isSupported()){
+
+hls=new Hls();
+
+hls.loadSource(url);
+
+hls.attachMedia(player);
+
+hls.on(Hls.Events.MANIFEST_PARSED,()=>{
+
+player.play();
+
+});
+
+}else{
+
+player.src=url;
+
+player.play();
+
+}
+
+}else{
+
+player.src=url;
+
+player.play();
+
+}
+
+};
+
+/* ---------- PLAY / PAUSE ---------- */
+
+playBtn.onclick = () => {
+
+    if (player.paused) {
+
+        player.play();
+
+    } else {
+
+        player.pause();
+
+    }
+
+};
+
+player.onplay = () => {
+
+    playBtn.innerHTML =
+    '<i class="fa-solid fa-pause"></i>';
+
+};
+
+player.onpause = () => {
+
+    playBtn.innerHTML =
+    '<i class="fa-solid fa-play"></i>';
+
+};
+
+/* ---------- SEEK ---------- */
+
+player.addEventListener("loadedmetadata", () => {
+
+    seek.max = player.duration;
+
+    duration.textContent = formatTime(player.duration);
+
+});
+
+player.ontimeupdate = () => {
+
+    seek.value = player.currentTime;
+
+    current.textContent = formatTime(player.currentTime);
+
+};
+
+seek.oninput = () => {
+
+    player.currentTime = seek.value;
+
+};
+
+/* ---------- REWIND ---------- */
+
+rewindBtn.onclick = () => {
+
+    player.currentTime = Math.max(0, player.currentTime - 10);
+
+};
+
+/* ---------- FORWARD ---------- */
+
+forwardBtn.onclick = () => {
+
+    player.currentTime = Math.min(player.duration, player.currentTime + 10);
+
+};
+
+/* ---------- VOLUME ---------- */
+
+volumeBtn.onclick = () => {
+
+    volumeSlider.style.display =
+        volumeSlider.style.display === "block"
+        ? "none"
+        : "block";
+
+};
+
+volumeSlider.oninput = () => {
+
+    player.volume = volumeSlider.value;
+
+    player.muted = player.volume == 0;
+
+    volumeBtn.innerHTML = player.muted
+        ? '<i class="fa-solid fa-volume-xmark"></i>'
+        : '<i class="fa-solid fa-volume-high"></i>';
+
+};
+
+/* ---------- FULLSCREEN ---------- */
+
+fullscreenBtn.onclick = () => {
+
+    if (!document.fullscreenElement) {
+
+        player.requestFullscreen();
+
+    } else {
+
+        document.exitFullscreen();
+
+    }
+
+};
+
+/* ---------- PiP ---------- */
+
+pipBtn.onclick = async () => {
+
+    if (document.pictureInPictureEnabled) {
+
+        try {
+
+            await player.requestPictureInPicture();
+
+        } catch (e) {
+
+            console.log(e);
+
+        }
+
+    }
+
+};
 
 /* ---------- SETTINGS ---------- */
 
-settingsBtn.onclick=()=>{
+settingsBtn.onclick = () => {
 
-settingsMenu.style.display=
-settingsMenu.style.display==="block"
-?"none":"block";
+    settingsMenu.style.display =
+        settingsMenu.style.display === "block"
+        ? "none"
+        : "block";
 
-showSpeedMenu();
+    showSpeedMenu();
+
+};
+
+closeSettings.onclick = () => {
+
+    settingsMenu.style.display = "none";
 
 };
 
 /* ---------- SPEED ---------- */
 
-function showSpeedMenu(){
+function showSpeedMenu() {
 
-tabSpeed.classList.add("active");
-tabAudio.classList.remove("active");
-tabSubtitle.classList.remove("active");
+    tabSpeed.classList.add("active");
+    tabAudio.classList.remove("active");
+    tabSubtitle.classList.remove("active");
 
-settingsContent.innerHTML="";
+    settingsContent.innerHTML = "";
 
-const speeds=[0.5,0.75,1,1.25,1.5,1.75,2];
+    const box = document.createElement("div");
+    box.className = "settings-list";
 
-const box=document.createElement("div");
-box.className="settings-list";
+    [0.5,0.75,1,1.25,1.5,1.75,2].forEach(rate=>{
 
-speeds.forEach(rate=>{
+        const btn=document.createElement("button");
 
-const btn=document.createElement("button");
+        btn.textContent =
+            rate==1 ? "Normal" : rate+"x";
 
-btn.textContent=rate==1?"Normal":rate+"x";
+        if(player.playbackRate==rate){
+            btn.classList.add("active");
+        }
 
-if(video.playbackRate===rate){
-btn.classList.add("active");
-}
+        btn.onclick=()=>{
 
-btn.onclick=()=>{
+            player.playbackRate=rate;
 
-video.playbackRate=rate;
+            showSpeedMenu();
 
-showSpeedMenu();
+        };
 
-};
+        box.appendChild(btn);
 
-box.appendChild(btn);
+    });
 
-});
-
-settingsContent.appendChild(box);
-
-}
-
-/* ---------- AUDIO TRACKS ---------- */
-
-async function loadAudioTracks(){
-
-if(!player) return;
-
-const tracks=player.getVariantTracks();
-
-window.audioVariants=tracks;
+    settingsContent.appendChild(box);
 
 }
+
+/* ---------- AUDIO ---------- */
 
 function showAudioMenu(){
 
-tabAudio.classList.add("active");
-tabSpeed.classList.remove("active");
-tabSubtitle.classList.remove("active");
+    tabAudio.classList.add("active");
+    tabSpeed.classList.remove("active");
+    tabSubtitle.classList.remove("active");
 
-settingsContent.innerHTML="";
+    settingsContent.innerHTML="";
 
-const box=document.createElement("div");
-box.className="settings-list";
+    const box=document.createElement("div");
+    box.className="settings-list";
 
-if(!window.audioVariants || window.audioVariants.length===0){
+    const btn=document.createElement("button");
 
-const btn=document.createElement("button");
-btn.textContent="No Audio Tracks";
-box.appendChild(btn);
+    btn.textContent="Browser Default Audio";
 
-}else{
+    box.appendChild(btn);
 
-window.audioVariants.forEach(track=>{
-
-const btn=document.createElement("button");
-
-btn.textContent =
-(track.language || "Unknown") +
-(track.label ? " - " + track.label : "");
-
-btn.onclick=()=>{
-
-player.selectVariantTrack(track, true);
-video.play();
-
-};
-
-box.appendChild(btn);
-
-});
-
-}
-
-settingsContent.appendChild(box);
+    settingsContent.appendChild(box);
 
 }
 
@@ -297,57 +317,52 @@ settingsContent.appendChild(box);
 
 function showSubtitleMenu(){
 
-tabSubtitle.classList.add("active");
-tabSpeed.classList.remove("active");
-tabAudio.classList.remove("active");
+    tabSubtitle.classList.add("active");
+    tabSpeed.classList.remove("active");
+    tabAudio.classList.remove("active");
 
-settingsContent.innerHTML="";
+    settingsContent.innerHTML="";
 
-const box=document.createElement("div");
-box.className="settings-list";
+    const box=document.createElement("div");
+    box.className="settings-list";
 
-const loadBtn=document.createElement("button");
-loadBtn.textContent="Load Subtitle (.vtt)";
+    const loadSubtitle=document.createElement("button");
 
-loadBtn.onclick=()=>{
+    loadSubtitle.textContent="Load Subtitle (.vtt)";
 
-subtitleFile.click();
+    loadSubtitle.onclick=()=>{
 
-};
+        subtitleFile.click();
 
-box.appendChild(loadBtn);
+    };
 
-settingsContent.appendChild(box);
+    box.appendChild(loadSubtitle);
+
+    settingsContent.appendChild(box);
 
 }
 
 subtitleFile.onchange=(e)=>{
 
-const file=e.target.files[0];
+    const file=e.target.files[0];
 
-if(!file) return;
+    if(!file) return;
 
-subtitleTrack.src=URL.createObjectURL(file);
+    subtitleTrack.src=URL.createObjectURL(file);
 
-video.textTracks[0].mode="showing";
+    if(player.textTracks.length){
+
+        player.textTracks[0].mode="showing";
+
+    }
 
 };
-
-/* ---------- TAB EVENTS ---------- */
 
 tabSpeed.onclick=showSpeedMenu;
-
 tabAudio.onclick=showAudioMenu;
-
 tabSubtitle.onclick=showSubtitleMenu;
 
-closeSettings.onclick=()=>{
-
-settingsMenu.style.display="none";
-
-};
-
-/* ---------- CLOSE OUTSIDE ---------- */
+/* ---------- CLOSE SETTINGS OUTSIDE ---------- */
 
 document.addEventListener("click",(e)=>{
 
@@ -362,7 +377,7 @@ settingsMenu.style.display="none";
 
 });
 
-/* ---------- AUTO HIDE ---------- */
+/* ---------- AUTO HIDE CONTROLS ---------- */
 
 const controls=document.querySelector(".controls");
 
@@ -370,11 +385,11 @@ function showControls(){
 
 controls.classList.remove("hide");
 
-clearTimeout(controlsTimer);
+clearTimeout(hideTimer);
 
-controlsTimer=setTimeout(()=>{
+hideTimer=setTimeout(()=>{
 
-if(!video.paused){
+if(!player.paused){
 
 controls.classList.add("hide");
 
@@ -387,12 +402,12 @@ controls.classList.add("hide");
 document.addEventListener("mousemove",showControls);
 document.addEventListener("touchstart",showControls);
 
-video.addEventListener("play",showControls);
-video.addEventListener("pause",showControls);
+player.addEventListener("play",showControls);
+player.addEventListener("pause",showControls);
 
 showControls();
 
-/* ---------- KEYBOARD ---------- */
+/* ---------- KEYBOARD SHORTCUTS ---------- */
 
 document.addEventListener("keydown",(e)=>{
 
@@ -402,19 +417,33 @@ case "Space":
 
 e.preventDefault();
 
-video.paused ? video.play() : video.pause();
+player.paused ? player.play() : player.pause();
 
 break;
 
 case "ArrowLeft":
 
-video.currentTime-=10;
+player.currentTime-=10;
 
 break;
 
 case "ArrowRight":
 
-video.currentTime+=10;
+player.currentTime+=10;
+
+break;
+
+case "ArrowUp":
+
+player.volume=Math.min(1,player.volume+0.1);
+volumeSlider.value=player.volume;
+
+break;
+
+case "ArrowDown":
+
+player.volume=Math.max(0,player.volume-0.1);
+volumeSlider.value=player.volume;
 
 break;
 
@@ -426,7 +455,11 @@ break;
 
 case "KeyM":
 
-video.muted=!video.muted;
+player.muted=!player.muted;
+
+volumeBtn.innerHTML=player.muted
+?'<i class="fa-solid fa-volume-xmark"></i>'
+:'<i class="fa-solid fa-volume-high"></i>';
 
 break;
 
@@ -434,67 +467,37 @@ break;
 
 });
 
+/* ---------- DOUBLE TAP SEEK ---------- */
+
+let lastTap=0;
+
+player.addEventListener("touchend",(e)=>{
+
+const now=Date.now();
+
+if(now-lastTap<300){
+
+const x=e.changedTouches[0].clientX;
+
+if(x<window.innerWidth/2){
+
+player.currentTime-=10;
+
+}else{
+
+player.currentTime+=10;
+
+}
+
+}
+
+lastTap=now;
+
+});
+
 /* ---------- START ---------- */
 
 showSpeedMenu();
 
+console.log("ANiX Video Stream Loaded");
 
-
-
-
-async function initPlayer(){
-
-shaka.polyfill.installAll();
-
-if(!shaka.Player.isBrowserSupported()){
-
-alert("Browser not supported");
-
-return;
-
-}
-
-player = new shaka.Player(video);
-
-player.addEventListener("error",(e)=>{
-
-console.error(e);
-
-});
-
-}
-
-initPlayer();
-loadBtn.onclick = async ()=>{
-
-const url = urlInput.value.trim();
-
-if(!url) return;
-
-try{
-
-await player.load(url);
-
-const variants = player.getVariantTracks();
-
-console.log(variants);
-
-window.audioVariants = variants;
-
-await video.play();
-
-title.innerText =
-url.split("/").pop();
-player.addEventListener("error", (event) => {
-    console.error("Shaka Error:", event.detail);
-    alert("Shaka Error Code: " + event.detail.code);
-});
-  
-loadAudioTracks();
-
-catch(err){
-    console.error(err);
-    alert(err.message || JSON.stringify(err));
-}
-
-};
