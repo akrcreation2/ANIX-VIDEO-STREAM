@@ -332,6 +332,153 @@ document.addEventListener("keydown", (e) => {
 
 });
 
+/* ===========================
+   SETTINGS PANEL
+=========================== */
+
+const settingsBtn = document.getElementById("settings");
+const settingsMenu = document.getElementById("settingsMenu");
+const settingsContent = document.getElementById("settingsContent");
+
+const tabSpeed = document.getElementById("tabSpeed");
+const tabAudio = document.getElementById("tabAudio");
+const tabSubtitle = document.getElementById("tabSubtitle");
+const closeSettings = document.getElementById("closeSettings");
+
+settingsBtn.onclick = () => {
+    settingsMenu.style.display = "block";
+    showSpeed();
+};
+
+closeSettings.onclick = () => {
+    settingsMenu.style.display = "none";
+};
+
+function activeTab(tab){
+    document.querySelectorAll(".tab").forEach(t=>{
+        t.classList.remove("active");
+    });
+    tab.classList.add("active");
+}
+
+/* ---------- SPEED ---------- */
+
+function showSpeed(){
+
+    activeTab(tabSpeed);
+
+    settingsContent.innerHTML=`
+        <div class="setting-list">
+
+            <div class="setting-item" data-speed="0.25">0.25x</div>
+            <div class="setting-item" data-speed="0.5">0.5x</div>
+            <div class="setting-item" data-speed="0.75">0.75x</div>
+            <div class="setting-item active-speed" data-speed="1">• 1x</div>
+            <div class="setting-item" data-speed="1.25">1.25x</div>
+            <div class="setting-item" data-speed="1.5">1.5x</div>
+            <div class="setting-item" data-speed="2">2x</div>
+
+        </div>
+    `;
+
+    document.querySelectorAll(".setting-item").forEach(item=>{
+
+        item.onclick=()=>{
+
+            document.querySelectorAll(".setting-item")
+            .forEach(i=>i.classList.remove("active-speed"));
+
+            item.classList.add("active-speed");
+
+            player.playbackRate=parseFloat(item.dataset.speed);
+
+        };
+
+    });
+
+}
+
+/* ---------- AUDIO ---------- */
+
+function showAudio(){
+
+    activeTab(tabAudio);
+
+    let html='<div class="setting-list">';
+
+    if(player.audioTracks && player.audioTracks.length){
+
+        for(let i=0;i<player.audioTracks.length;i++){
+
+            html+=`
+            <div class="setting-item"
+            onclick="selectAudio(${i})">
+            Audio ${i+1}
+            </div>
+            `;
+
+        }
+
+    }else{
+
+        html+=`
+        <div class="setting-item">
+        No Audio Tracks
+        </div>
+        `;
+
+    }
+
+    html+='</div>';
+
+    settingsContent.innerHTML=html;
+
+}
+
+/* ---------- SUBTITLE ---------- */
+
+function showSubtitle(){
+
+    activeTab(tabSubtitle);
+
+    settingsContent.innerHTML=`
+
+    <div class="setting-list">
+
+        <label class="setting-item">
+
+            Load Subtitle (.vtt)
+
+            <input
+            type="file"
+            id="subtitleFile"
+            accept=".vtt"
+            hidden>
+
+        </label>
+
+        <div
+        class="setting-item"
+        id="disableSubtitle">
+
+        Disable Subtitle
+
+        </div>
+
+    </div>
+
+    `;
+
+}
+
+/* ---------- TAB CLICK ---------- */
+
+tabSpeed.onclick=showSpeed;
+
+tabAudio.onclick=showAudio;
+
+tabSubtitle.onclick=showSubtitle;
+
 const settingsBtn = document.getElementById("settings");
 const settingsMenu = document.getElementById("settingsMenu");
 const closeSettings = document.getElementById("closeSettings");
