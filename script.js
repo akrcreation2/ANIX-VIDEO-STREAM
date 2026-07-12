@@ -1,480 +1,462 @@
-const video = document.getElementById("player");
-
+const player = document.getElementById("player");
 const playBtn = document.getElementById("play");
-const rewindBtn = document.getElementById("rewind");
-const forwardBtn = document.getElementById("forward");
+const rewind = document.getElementById("rewind");
+const forward = document.getElementById("forward");
 const seek = document.getElementById("seek");
-
 const current = document.getElementById("current");
 const duration = document.getElementById("duration");
-
-const volumeSlider = document.getElementById("volume");
 const volumeBtn = document.getElementById("volumeBtn");
+const volume = document.getElementById("volume");
+const fullscreen = document.getElementById("fullscreen");
+const pip = document.getElementById("pip");
+const url = document.getElementById("url");
+const load = document.getElementById("load");
+const title = document.getElementById("videoTitle");
 
-const fullscreenBtn = document.getElementById("fullscreen");
-const pipBtn = document.getElementById("pip");
-
-const urlInput = document.getElementById("url");
-const loadBtn = document.getElementById("load");
+const settings = document.getElementById("settings");
+const settingsMenu = document.getElementById("settingsMenu");
+const settingsContent = document.getElementById("settingsContent");
 
 const speed = document.getElementById("speed");
+const audioTrack = document.getElementById("audioTrack");
+const subtitleFile = document.getElementById("subtitleFile");
+const subtitleToggle = document.getElementById("subtitleToggle");
+const subtitleTrack = document.getElementById("subtitleTrack");
 
-function formatTime(time){
+let hls = null;
+let subtitleEnabled = true;
 
-    if(isNaN(time)) return "00:00";
+function formatTime(sec){
 
-    const h = Math.floor(time/3600);
-    const m = Math.floor((time%3600)/60);
-    const s = Math.floor(time%60);
+    if(isNaN(sec)) return "00:00";
 
-    if(h>0){
+    const h = Math.floor(sec / 3600);
+    const m = Math.floor((sec % 3600) / 60);
+    const s = Math.floor(sec % 60);
 
+    if(h > 0){
         return `${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
-
     }
 
     return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
-
 }
 
-loadBtn.onclick=()=>{
+load.onclick = () => {
 
-    const src=urlInput.value.trim();
+    const videoUrl = url.value.trim();
 
-    if(src==="") return;
+    if(!videoUrl) return;
 
-    if(src.endsWith(".m3u8")){
+    title.innerText = videoUrl.split("/").pop();
 
-        if(Hls.isSupported()){
+    if(hls){
+        hls.destroy();
+        hls = null;
+    }
 
-            const hls=new Hls();
+    if(videoUrl.endsWith(".m3u8") && Hls.isSupported()){
 
-            hls.loadSource(src);
+        hls = new Hls();
 
-            hls.attachMedia(video);
+        hls.loadSource(videoUrl);
 
-            hls.on(Hls.Events.MANIFEST_PARSED,function(){
-
-                video.play();
-
-            });
-
-        }else{
-
-            video.src=src;
-
-            video.play();
-
-        }
+        hls.attachMedia(player);
 
     }else{
 
-        video.src=src;
+        player.src = videoUrl;
 
-        video.play();
+    }
+
+    player.play();
+
+};
+
+playBtn.onclick = () => {
+
+    if(player.paused){
+
+        player.play();
+
+    }else{
+
+        player.pause();
 
     }
 
 };
 
-// ==========================
-// PLAYER CONTROLS
-// ==========================
+player.onplay = () => {
 
-playBtn.addEventListener("click", () => {
+    playBtn.innerHTML =
+    '<i class="fa-solid fa-pause"></i>';
 
-    if (video.paused) {
+};
 
-        video.play();
+player.onpause = () => {
 
-    } else {
+    playBtn.innerHTML =
+    '<i class="fa-solid fa-play"></i>';
 
-        video.pause();
+};
+
+rewind.onclick = () => {
+
+    player.currentTime -= 10;
+
+};
+
+forward.onclick = () => {
+
+    player.currentTime += 10;
+
+};
+
+player.ontimeupdate = () => {
+
+    seek.max = player.duration || 0;
+    seek.value = player.currentTime;
+
+    current.textContent = formatTime(player.currentTime);
+    duration.textContent = formatTime(player.duration);
+
+};
+
+seek.oninput = () => {
+
+    player.currentTime = seek.value;
+
+};
+
+volumeBtn.onclick = () => {
+
+    volume.style.display =
+        volume.style.display === "block"
+        ? "none"
+        : "block";
+
+};
+
+volume.oninput = () => {
+
+    player.volume = volume.value;
+
+    if(player.volume == 0){
+
+        volumeBtn.innerHTML =
+        '<i class="fa-solid fa-volume-xmark"></i>';
+
+    }else{
+
+        volumeBtn.innerHTML =
+        '<i class="fa-solid fa-volume-high"></i>';
 
     }
 
-});
+};
 
-video.addEventListener("play", () => {
+fullscreen.onclick = () => {
 
-    playBtn.innerHTML =
-        '<i class="fa-solid fa-pause"></i>';
+    if(!document.fullscreenElement){
 
-});
+        player.requestFullscreen();
 
-video.addEventListener("pause", () => {
-
-    playBtn.innerHTML =
-        '<i class="fa-solid fa-play"></i>';
-
-});
-
-// ==========================
-// SEEK BAR
-// ==========================
-
-video.addEventListener("loadedmetadata", () => {
-
-    seek.max = Math.floor(video.duration);
-
-    duration.textContent = formatTime(video.duration);
-
-});
-
-video.addEventListener("timeupdate", () => {
-
-    seek.value = Math.floor(video.currentTime);
-
-    current.textContent = formatTime(video.currentTime);
-
-});
-
-seek.addEventListener("input", () => {
-
-    video.currentTime = seek.value;
-
-});
-
-// ==========================
-// 10 SEC BACK
-// ==========================
-
-rewindBtn.addEventListener("click", () => {
-
-    video.currentTime = Math.max(0, video.currentTime - 10);
-
-});
-
-// ==========================
-// 10 SEC FORWARD
-// ==========================
-
-forwardBtn.addEventListener("click", () => {
-
-    video.currentTime = Math.min(
-
-        video.duration,
-
-        video.currentTime + 10
-
-    );
-
-});
-
-// ==========================
-// VOLUME
-// ==========================
-
-volumeSlider.addEventListener("input", () => {
-
-    video.volume = volumeSlider.value;
-
-});
-
-volumeBtn.addEventListener("click", () => {
-
-    video.muted = !video.muted;
-
-    if (video.muted) {
-
-        volumeBtn.innerHTML =
-            '<i class="fa-solid fa-volume-xmark"></i>';
-
-    } else {
-
-        volumeBtn.innerHTML =
-            '<i class="fa-solid fa-volume-high"></i>';
-
-    }
-
-});
-
-// ==========================
-// SPEED
-// ==========================
-
-speed.addEventListener("change", () => {
-
-    video.playbackRate = parseFloat(speed.value);
-
-});
-
-// ==========================
-// FULLSCREEN
-// ==========================
-
-fullscreenBtn.addEventListener("click", async () => {
-
-    if (!document.fullscreenElement) {
-
-        try {
-
-            await video.requestFullscreen();
-
-        } catch (e) {
-            console.log(e);
-        }
-
-    } else {
+    }else{
 
         document.exitFullscreen();
 
     }
 
-});
+};
 
-// ==========================
-// PICTURE IN PICTURE
-// ==========================
+pip.onclick = async () => {
 
-pipBtn.addEventListener("click", async () => {
+    if(document.pictureInPictureEnabled){
 
-    try {
+        try{
 
-        if (document.pictureInPictureEnabled &&
-            document.pictureInPictureElement !== video) {
+            await player.requestPictureInPicture();
 
-            await video.requestPictureInPicture();
-
-        }
-
-    } catch (e) {
-
-        console.log(e);
+        }catch(e){}
 
     }
 
+};
+
+function showSpeedMenu() {
+
+settingsContent.innerHTML = "";
+
+const speeds = [0.5,0.75,1,1.25,1.5,1.75,2];
+
+const list = document.createElement("div");
+list.className = "settings-list";
+
+speeds.forEach(rate=>{
+
+const btn = document.createElement("button");
+
+btn.textContent = rate===1 ? "Normal" : rate+"x";
+
+if(player.playbackRate===rate){
+btn.classList.add("active");
+}
+
+btn.onclick=()=>{
+
+player.playbackRate=rate;
+settingsContent.innerHTML="";
+showSpeedMenu();
+
+};
+
+list.appendChild(btn);
+
 });
 
-// ==========================
-// AUTO HIDE CONTROLS
-// ==========================
+settingsContent.appendChild(list);
 
-const controls = document.querySelector(".controls");
+}
+
+function showAudioMenu(){
+
+settingsContent.innerHTML="";
+
+const list=document.createElement("div");
+list.className="settings-list";
+
+if(player.audioTracks && player.audioTracks.length){
+
+for(let i=0;i<player.audioTracks.length;i++){
+
+const track=player.audioTracks[i];
+
+const btn=document.createElement("button");
+
+btn.textContent=track.label || "Audio "+(i+1);
+
+btn.onclick=()=>{
+
+for(let j=0;j<player.audioTracks.length;j++){
+
+player.audioTracks[j].enabled=false;
+
+}
+
+track.enabled=true;
+
+};
+
+list.appendChild(btn);
+
+}
+
+}else{
+
+const btn=document.createElement("button");
+btn.textContent="No Audio Tracks";
+btn.disabled=true;
+list.appendChild(btn);
+
+}
+
+settingsContent.appendChild(list);
+
+}
+
+function showSubtitleMenu(){
+
+settingsContent.innerHTML="";
+
+const list=document.createElement("div");
+list.className="settings-list";
+
+const loadBtn=document.createElement("button");
+loadBtn.innerHTML="Load Subtitle (.vtt)";
+loadBtn.onclick=()=>subtitleFile.click();
+
+list.appendChild(loadBtn);
+
+const toggleBtn=document.createElement("button");
+toggleBtn.innerHTML=subtitleEnabled ? "Subtitle : ON" : "Subtitle : OFF";
+
+toggleBtn.onclick=()=>{
+
+subtitleEnabled=!subtitleEnabled;
+
+player.textTracks[0].mode=
+subtitleEnabled?"showing":"hidden";
+
+showSubtitleMenu();
+
+};
+
+list.appendChild(toggleBtn);
+
+settingsContent.appendChild(list);
+
+}
+
+settings.onclick=()=>{
+
+settingsMenu.style.display=
+settingsMenu.style.display==="block"
+?"none":"block";
+
+showSpeedMenu();
+
+};
+
+tabSpeed.onclick=()=>{
+
+document.querySelectorAll(".tab")
+.forEach(t=>t.classList.remove("active"));
+
+tabSpeed.classList.add("active");
+
+showSpeedMenu();
+
+};
+
+tabAudio.onclick=()=>{
+
+document.querySelectorAll(".tab")
+.forEach(t=>t.classList.remove("active"));
+
+tabAudio.classList.add("active");
+
+showAudioMenu();
+
+};
+
+tabSubtitle.onclick=()=>{
+
+document.querySelectorAll(".tab")
+.forEach(t=>t.classList.remove("active"));
+
+tabSubtitle.classList.add("active");
+
+showSubtitleMenu();
+
+};
+
+closeSettings.onclick=()=>{
+
+settingsMenu.style.display="none";
+
+};
+
+subtitleFile.onchange=(e)=>{
+
+const file=e.target.files[0];
+
+if(!file)return;
+
+subtitleTrack.src=URL.createObjectURL(file);
+
+player.textTracks[0].mode="showing";
+
+subtitleEnabled=true;
+
+};
+
+document.addEventListener("click",(e)=>{
+
+if(!settingsMenu.contains(e.target) &&
+!settings.contains(e.target)){
+
+settingsMenu.style.display="none";
+
+}
+
+});
+
+/* ---------- SETTINGS DEFAULT ---------- */
+
+showSpeedMenu();
+
+/* ---------- KEYBOARD SHORTCUTS ---------- */
+
+document.addEventListener("keydown",(e)=>{
+
+switch(e.code){
+
+case "Space":
+e.preventDefault();
+
+if(player.paused){
+player.play();
+}else{
+player.pause();
+}
+break;
+
+case "ArrowLeft":
+player.currentTime-=10;
+break;
+
+case "ArrowRight":
+player.currentTime+=10;
+break;
+
+case "ArrowUp":
+player.volume=Math.min(1,player.volume+0.1);
+volume.value=player.volume;
+break;
+
+case "ArrowDown":
+player.volume=Math.max(0,player.volume-0.1);
+volume.value=player.volume;
+break;
+
+case "KeyF":
+fullscreen.click();
+break;
+
+case "KeyM":
+player.muted=!player.muted;
+
+volumeBtn.innerHTML=player.muted
+?'<i class="fa-solid fa-volume-xmark"></i>'
+:'<i class="fa-solid fa-volume-high"></i>';
+
+break;
+
+}
+
+});
+
+
+/* ---------- AUTO HIDE CONTROLS ---------- */
+
+const controls=document.querySelector(".controls");
 
 let hideTimer;
 
-function showControls() {
+function showControls(){
 
-    controls.style.opacity = "1";
-    controls.style.pointerEvents = "auto";
+controls.style.opacity="1";
 
-    clearTimeout(hideTimer);
+clearTimeout(hideTimer);
 
-    hideTimer = setTimeout(() => {
+hideTimer=setTimeout(()=>{
 
-        if (!video.paused) {
+if(!player.paused){
 
-            controls.style.opacity = "0";
-
-            controls.style.pointerEvents = "none";
-
-        }
-
-    }, 3000);
+controls.style.opacity="0";
 
 }
 
-video.addEventListener("mousemove", showControls);
-video.addEventListener("touchstart", showControls);
-video.addEventListener("play", showControls);
+},3000);
 
-video.addEventListener("pause", () => {
+}
 
-    controls.style.opacity = "1";
-    controls.style.pointerEvents = "auto";
+document.addEventListener("mousemove",showControls);
+document.addEventListener("touchstart",showControls);
 
-});
+player.addEventListener("pause",showControls);
+
+player.addEventListener("play",showControls);
 
 showControls();
 
-// ==========================
-// KEYBOARD SHORTCUTS
-// ==========================
-
-document.addEventListener("keydown", (e) => {
-
-    switch (e.code) {
-
-        case "Space":
-
-            e.preventDefault();
-
-            playBtn.click();
-
-            break;
-
-        case "ArrowLeft":
-
-            rewindBtn.click();
-
-            break;
-
-        case "ArrowRight":
-
-            forwardBtn.click();
-
-            break;
-
-        case "KeyF":
-
-            fullscreenBtn.click();
-
-            break;
-
-        case "KeyM":
-
-            volumeBtn.click();
-
-            break;
-
-    }
-
-});
-
-/* ===========================
-   SETTINGS PANEL
-=========================== */
-
-const settingsBtn = document.getElementById("settings");
-const settingsMenu = document.getElementById("settingsMenu");
-const settingsContent = document.getElementById("settingsContent");
-
-const tabSpeed = document.getElementById("tabSpeed");
-const tabAudio = document.getElementById("tabAudio");
-const tabSubtitle = document.getElementById("tabSubtitle");
-const closeSettings = document.getElementById("closeSettings");
-
-settingsBtn.onclick = () => {
-    settingsMenu.style.display = "block";
-    showSpeed();
-};
-
-closeSettings.onclick = () => {
-    settingsMenu.style.display = "none";
-};
-
-function activeTab(tab){
-    document.querySelectorAll(".tab").forEach(t=>{
-        t.classList.remove("active");
-    });
-    tab.classList.add("active");
-}
-
-/* ---------- SPEED ---------- */
-
-function showSpeed(){
-
-    activeTab(tabSpeed);
-
-    settingsContent.innerHTML=`
-        <div class="setting-list">
-
-            <div class="setting-item" data-speed="0.25">0.25x</div>
-            <div class="setting-item" data-speed="0.5">0.5x</div>
-            <div class="setting-item" data-speed="0.75">0.75x</div>
-            <div class="setting-item active-speed" data-speed="1">• 1x</div>
-            <div class="setting-item" data-speed="1.25">1.25x</div>
-            <div class="setting-item" data-speed="1.5">1.5x</div>
-            <div class="setting-item" data-speed="2">2x</div>
-
-        </div>
-    `;
-
-    document.querySelectorAll(".setting-item").forEach(item=>{
-
-        item.onclick=()=>{
-
-            document.querySelectorAll(".setting-item")
-            .forEach(i=>i.classList.remove("active-speed"));
-
-            item.classList.add("active-speed");
-
-            player.playbackRate=parseFloat(item.dataset.speed);
-
-        };
-
-    });
-
-}
-
-/* ---------- AUDIO ---------- */
-
-function showAudio(){
-
-    activeTab(tabAudio);
-
-    let html='<div class="setting-list">';
-
-    if(player.audioTracks && player.audioTracks.length){
-
-        for(let i=0;i<player.audioTracks.length;i++){
-
-            html+=`
-            <div class="setting-item"
-            onclick="selectAudio(${i})">
-            Audio ${i+1}
-            </div>
-            `;
-
-        }
-
-    }else{
-
-        html+=`
-        <div class="setting-item">
-        No Audio Tracks
-        </div>
-        `;
-
-    }
-
-    html+='</div>';
-
-    settingsContent.innerHTML=html;
-
-}
-
-/* ---------- SUBTITLE ---------- */
-
-function showSubtitle(){
-
-    activeTab(tabSubtitle);
-
-    settingsContent.innerHTML=`
-
-    <div class="setting-list">
-
-        <label class="setting-item">
-
-            Load Subtitle (.vtt)
-
-            <input
-            type="file"
-            id="subtitleFile"
-            accept=".vtt"
-            hidden>
-
-        </label>
-
-        <div
-        class="setting-item"
-        id="disableSubtitle">
-
-        Disable Subtitle
-
-        </div>
-
-    </div>
-
-    `;
-
-}
-
-/* ---------- TAB CLICK ---------- */
-
-tabSpeed.onclick=showSpeed;
-
-tabAudio.onclick=showAudio;
-
-tabSubtitle.onclick=showSubtitle;
