@@ -568,32 +568,27 @@ box-shadow:0 0 15px rgba(0,191,255,.35);
 height:48px;
 padding:0 24px;
 
-border:none;
 border-radius:14px;
 
-cursor:pointer;
-
-font-size:15px;
-font-weight:700;
 color:#fff;
+
+font-weight:700;
 
 background:linear-gradient(
 135deg,
-#00E5FF,
+#00F5FF,
 #3B82F6,
 #8B5CF6,
 #FF4FD8
-);
+) !important;
 
 background-size:300% 300%;
 
-animation:btnFlow 6s ease infinite;
+animation:btnFlow 6s linear infinite;
 
 box-shadow:
-0 0 10px rgba(0,229,255,.20),
-0 0 16px rgba(255,79,216,.12);
-
-transition:.3s;
+0 0 10px rgba(0,245,255,.30),
+0 0 18px rgba(255,79,216,.18) !important;
 
 }
 
@@ -614,7 +609,6 @@ box-shadow:
 100%{background-position:0% 50%;}
 
 }
-
 /* ---------- SCROLLBAR ---------- */
 
 ::-webkit-scrollbar{
@@ -733,13 +727,8 @@ transform:scale(1);
 
 button{
 
-background:transparent !important;
-
 border:none !important;
-
 outline:none !important;
-
-box-shadow:none !important;
 
 }
 
@@ -789,4 +778,3 @@ z-index:9999;
 
 }
 
-}
