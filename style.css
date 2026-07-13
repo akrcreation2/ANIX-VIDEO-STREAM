@@ -821,6 +821,41 @@ z-index:9999;
 
 }
 
+/* ---------- CSS FULLSCREEN ---------- */
+
+.player-box.css-fullscreen{
+
+position:fixed !important;
+
+top:0;
+left:0;
+
+width:100vw !important;
+height:100vh !important;
+
+z-index:999999;
+
+background:#000;
+
+}
+
+.player-box.css-fullscreen #player{
+
+width:100%;
+height:100%;
+
+object-fit:contain;
+
+}
+
+.player-box.css-fullscreen .controls,
+.player-box.css-fullscreen .center-controls,
+.player-box.css-fullscreen .video-title{
+
+z-index:999999;
+
+}
+
 .player-box:fullscreen .controls{
 
 z-index:9999;
