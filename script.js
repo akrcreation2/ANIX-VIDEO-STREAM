@@ -81,9 +81,11 @@ hls.loadSource(url);
 
 hls.attachMedia(player);
 
-hls.on(Hls.Events.MANIFEST_PARSED,()=>{
+hls.on(Hls.Events.MANIFEST_PARSED, () => {
 
-player.play();
+    console.log("Levels:", hls.levels);
+
+    player.play();
 
 });
 
@@ -332,7 +334,7 @@ function showQualityMenu(){
     const box=document.createElement("div");
     box.className="settings-list";
 
-    if(window.hls && hls.levels.length){
+    if(hls && hls.levels && hls.levels.length > 0){
 
         const auto=document.createElement("button");
 
@@ -350,7 +352,8 @@ function showQualityMenu(){
 
             const btn=document.createElement("button");
 
-            btn.textContent=level.height+"p";
+            btn.textContent =
+    (level.height || level.attrs.RESOLUTION?.split("x")[1] || "Auto") + "p";
 
             btn.onclick=()=>{
 
