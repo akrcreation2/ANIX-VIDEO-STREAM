@@ -218,19 +218,31 @@ volumeSlider.oninput = () => {
 
 const playerBox = document.querySelector(".player-box");
 
-fullscreenBtn.onclick = () => {
+fullscreenBtn.onclick = async () => {
 
-    alert("Fullscreen clicked");
+    try{
 
-    console.log("Fullscreen button clicked");
+        if(document.fullscreenElement){
 
-    if (!document.fullscreenElement) {
+            document.exitFullscreen();
 
-        playerBox.requestFullscreen();
+            return;
 
-    } else {
+        }
 
-        document.exitFullscreen();
+        if(playerBox.requestFullscreen){
+
+            await playerBox.requestFullscreen();
+
+        }else{
+
+            playerBox.classList.toggle("css-fullscreen");
+
+        }
+
+    }catch(e){
+
+        playerBox.classList.toggle("css-fullscreen");
 
     }
 
@@ -680,5 +692,15 @@ window.addEventListener("load", () => {
     urlInput.value = decodeURIComponent(videoUrl);
 
     loadBtn.click();
+
+});
+
+document.addEventListener("keydown",(e)=>{
+
+    if(e.key==="Escape"){
+
+        playerBox.classList.remove("css-fullscreen");
+
+    }
 
 });
