@@ -85,6 +85,8 @@ hls.on(Hls.Events.MANIFEST_PARSED, () => {
 
     console.log("Levels:", hls.levels);
 
+    console.table(hls.levels);
+
     player.play();
 
 });
@@ -398,8 +400,17 @@ function showQualityMenu(){
 
             const btn=document.createElement("button");
 
-            btn.textContent =
-    (level.height || level.attrs.RESOLUTION?.split("x")[1] || "Auto") + "p";
+            let quality = "Auto";
+
+if (level.height) {
+    quality = level.height + "p";
+} else if (level.attrs && level.attrs.RESOLUTION) {
+    quality = level.attrs.RESOLUTION.split("x")[1] + "p";
+} else if (level.bitrate) {
+    quality = Math.round(level.bitrate / 1000) + " kbps";
+}
+
+btn.textContent = quality;
 
             btn.onclick=()=>{
 
