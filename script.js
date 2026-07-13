@@ -89,6 +89,18 @@ hls.on(Hls.Events.MANIFEST_PARSED, () => {
 
 });
 
+hls.on(Hls.Events.AUDIO_TRACKS_UPDATED, () => {
+
+    console.log("Audio Tracks:", hls.audioTracks);
+
+});
+
+hls.on(Hls.Events.SUBTITLE_TRACKS_UPDATED, () => {
+
+    console.log("Subtitle Tracks:", hls.subtitleTracks);
+
+});
+
 }else{
 
 player.src=url;
@@ -303,18 +315,52 @@ function showAudioMenu(){
 
     tabAudio.classList.add("active");
     tabSpeed.classList.remove("active");
+    tabQuality.classList.remove("active");
     tabSubtitle.classList.remove("active");
 
-    settingsContent.innerHTML="";
+    settingsContent.innerHTML = "";
 
-    const box=document.createElement("div");
-    box.className="settings-list";
+    const box = document.createElement("div");
+    box.className = "settings-list";
 
-    const btn=document.createElement("button");
+    if(hls && hls.audioTracks && hls.audioTracks.length){
 
-    btn.textContent="Browser Default Audio";
+        hls.audioTracks.forEach((track,index)=>{
 
-    box.appendChild(btn);
+            const btn=document.createElement("button");
+
+            btn.textContent =
+                track.name ||
+                track.lang ||
+                "Audio " + (index+1);
+
+            if(hls.audioTrack === index){
+
+                btn.classList.add("active");
+
+            }
+
+            btn.onclick=()=>{
+
+                hls.audioTrack=index;
+
+                showAudioMenu();
+
+            };
+
+            box.appendChild(btn);
+
+        });
+
+    }else{
+
+        const btn=document.createElement("button");
+
+        btn.textContent="No Audio Tracks";
+
+        box.appendChild(btn);
+
+    }
 
     settingsContent.appendChild(box);
 
@@ -386,43 +432,81 @@ function showSubtitleMenu(){
     tabSubtitle.classList.add("active");
     tabSpeed.classList.remove("active");
     tabAudio.classList.remove("active");
+    tabQuality.classList.remove("active");
 
-    settingsContent.innerHTML="";
+    settingsContent.innerHTML = "";
 
-    const box=document.createElement("div");
-    box.className="settings-list";
+    const box = document.createElement("div");
+    box.className = "settings-list";
 
-    const loadSubtitle=document.createElement("button");
+    // OFF
+    const off = document.createElement("button");
+    off.textContent = "Off";
 
-    loadSubtitle.textContent="Load Subtitle (.vtt)";
+    if(hls && hls.subtitleTrack === -1){
+        off.classList.add("active");
+    }
 
-    loadSubtitle.onclick=()=>{
+    off.onclick = () => {
+
+        if(hls){
+            hls.subtitleTrack = -1;
+        }
+
+        showSubtitleMenu();
+
+    };
+
+    box.appendChild(off);
+
+    // Subtitle list
+    if(hls && hls.subtitleTracks && hls.subtitleTracks.length){
+
+        hls.subtitleTracks.forEach((track,index)=>{
+
+            const btn=document.createElement("button");
+
+            btn.textContent =
+                track.name ||
+                track.lang ||
+                "Subtitle " + (index+1);
+
+            if(hls.subtitleTrack===index){
+
+                btn.classList.add("active");
+
+            }
+
+            btn.onclick=()=>{
+
+                hls.subtitleTrack=index;
+
+                showSubtitleMenu();
+
+            };
+
+            box.appendChild(btn);
+
+        });
+
+    }
+
+    // Local subtitle
+    const local=document.createElement("button");
+
+    local.textContent="Load Subtitle (.vtt)";
+
+    local.onclick=()=>{
 
         subtitleFile.click();
 
     };
 
-    box.appendChild(loadSubtitle);
+    box.appendChild(local);
 
     settingsContent.appendChild(box);
 
 }
-
-subtitleFile.onchange=(e)=>{
-
-    const file=e.target.files[0];
-
-    if(!file) return;
-
-    subtitleTrack.src=URL.createObjectURL(file);
-
-    if(player.textTracks.length){
-
-        player.textTracks[0].mode="showing";
-
-    }
-
-};
 
 tabSpeed.onclick=showSpeedMenu;
 tabAudio.onclick=showAudioMenu;
