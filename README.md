@@ -10,7 +10,7 @@ Supports MP4 • MKV • M3U8 (HLS) • Direct Video URLs
 
 <div align="center">
 
-<a href="intent://gdrive-dd.bypased.workers.dev/direct.aspx?id=1f-Gi92qmYQGPnTjpLrHerDvaYHbcKwcz#Intent;scheme=https;package=com.mxtech.videoplayer.ad;end">
+<a href="mxplay://play?url=https://gdrive-dd.bypased.workers.dev/direct.aspx?id=1f-Gi92qmYQGPnTjpLrHerDvaYHbcKwcz">
 
 <img src="https://img.shields.io/badge/Open%20in-MX%20Player-00C853?style=for-the-badge&logo=android&logoColor=white">
 
