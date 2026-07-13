@@ -10,7 +10,7 @@ Supports MP4 • MKV • M3U8 (HLS) • Direct Video URLs
 
 <div align="center">
 
-<a href="https://short.do/6p7l9w">
+<a href="https://short.do/O8m1Ox">
     <img src="https://img.shields.io/badge/🚀%20Launch%20ANiX%20VIDEO%20STREAM-00E5FF?style=for-the-badge&labelColor=111827&color=8B5CF6">
 </a>
 
