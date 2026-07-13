@@ -218,16 +218,22 @@ volumeSlider.oninput = () => {
 
 const playerBox = document.querySelector(".player-box");
 
-fullscreenBtn.onclick = () => {
+fullscreenBtn.onclick = async () => {
 
-    if (!document.fullscreenElement) {
+    try {
 
-        playerBox.requestFullscreen();
+        if (player.requestFullscreen) {
+            await player.requestFullscreen();
+        } else if (player.webkitEnterFullscreen) {
+            player.webkitEnterFullscreen(); // Android / Safari
+        } else if (player.webkitRequestFullscreen) {
+            await player.webkitRequestFullscreen();
+        } else if (playerBox.requestFullscreen) {
+            await playerBox.requestFullscreen();
+        }
 
-    } else {
-
-        document.exitFullscreen();
-
+    } catch (e) {
+        console.log("Fullscreen Error:", e);
     }
 
 };
