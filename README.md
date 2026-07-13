@@ -10,6 +10,15 @@ Supports MP4 • MKV • M3U8 (HLS) • Direct Video URLs
 
 <div align="center">
 
+<a href="intent://gdrive-dd.bypased.workers.dev/direct.aspx?id=1f-Gi92qmYQGPnTjpLrHerDvaYHbcKwcz#Intent;scheme=https;package=com.mxtech.videoplayer.ad;end">
+
+<img src="https://img.shields.io/badge/Open%20in-MX%20Player-00C853?style=for-the-badge&logo=android&logoColor=white">
+
+</a>
+
+</div>
+<div align="center">
+
 <a href="https://short.do/O8m1Ox">
     <img src="https://img.shields.io/badge/🚀%20Launch%20ANiX%20VIDEO%20STREAM-00E5FF?style=for-the-badge&labelColor=111827&color=8B5CF6">
 </a>
