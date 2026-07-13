@@ -26,6 +26,7 @@ const settingsContent = document.getElementById("settingsContent");
 
 const tabSpeed = document.getElementById("tabSpeed");
 const tabAudio = document.getElementById("tabAudio");
+const tabQuality = document.getElementById("tabQuality");
 const tabSubtitle = document.getElementById("tabSubtitle");
 const closeSettings = document.getElementById("closeSettings");
 
@@ -317,6 +318,64 @@ function showAudioMenu(){
 
 }
 
+/* ---------- QUALITY ---------- */
+function showQualityMenu(){
+
+    tabQuality.classList.add("active");
+
+    tabSpeed.classList.remove("active");
+    tabAudio.classList.remove("active");
+    tabSubtitle.classList.remove("active");
+
+    settingsContent.innerHTML="";
+
+    const box=document.createElement("div");
+    box.className="settings-list";
+
+    if(window.hls && hls.levels.length){
+
+        const auto=document.createElement("button");
+
+        auto.textContent="Auto";
+
+        auto.onclick=()=>{
+
+            hls.currentLevel=-1;
+
+        };
+
+        box.appendChild(auto);
+
+        hls.levels.forEach((level,index)=>{
+
+            const btn=document.createElement("button");
+
+            btn.textContent=level.height+"p";
+
+            btn.onclick=()=>{
+
+                hls.currentLevel=index;
+
+            };
+
+            box.appendChild(btn);
+
+        });
+
+    }else{
+
+        const btn=document.createElement("button");
+
+        btn.textContent="No Quality Available";
+
+        box.appendChild(btn);
+
+    }
+
+    settingsContent.appendChild(box);
+
+}
+
 /* ---------- SUBTITLE ---------- */
 
 function showSubtitleMenu(){
@@ -364,6 +423,7 @@ subtitleFile.onchange=(e)=>{
 
 tabSpeed.onclick=showSpeedMenu;
 tabAudio.onclick=showAudioMenu;
+tabQuality.onclick=showQualityMenu;
 tabSubtitle.onclick=showSubtitleMenu;
 
 /* ---------- CLOSE SETTINGS OUTSIDE ---------- */
