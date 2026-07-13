@@ -93,24 +93,39 @@ transform:scale(1.08);
 
 .brand-title{
 
-font-size:28px;
+font-size:30px;
 font-weight:800;
-letter-spacing:1px;
 
 background:linear-gradient(
 90deg,
 #00F5FF,
-#3C8DFF,
+#4F7CFF,
 #8B5CF6,
-#FF4FD8
+#FF4FD8,
+#00F5FF
 );
 
-background-size:300%;
+background-size:250%;
 
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 
-animation:logoFlow 8s linear infinite;
+animation:titleFlow 10s linear infinite;
+
+filter:
+drop-shadow(0 0 4px rgba(0,245,255,.18));
+
+}
+
+@keyframes titleFlow{
+
+0%{
+background-position:0%;
+}
+
+100%{
+background-position:250%;
+}
 
 }
 
@@ -551,27 +566,34 @@ box-shadow:0 0 15px rgba(0,191,255,.35);
 .url-box button{
 
 height:48px;
-
-padding:0 22px;
+padding:0 24px;
 
 border:none;
-
-border-radius:12px;
+border-radius:14px;
 
 cursor:pointer;
 
 font-size:15px;
-
-font-weight:600;
-
+font-weight:700;
 color:#fff;
 
 background:linear-gradient(
 135deg,
-#00bfff,
-#00ffe7);
+#00E5FF,
+#3B82F6,
+#8B5CF6,
+#FF4FD8
+);
 
-transition:.25s;
+background-size:300% 300%;
+
+animation:btnFlow 6s ease infinite;
+
+box-shadow:
+0 0 10px rgba(0,229,255,.20),
+0 0 16px rgba(255,79,216,.12);
+
+transition:.3s;
 
 }
 
@@ -580,7 +602,16 @@ transition:.25s;
 transform:translateY(-2px);
 
 box-shadow:
-0 0 20px rgba(0,191,255,.5);
+0 0 16px rgba(0,229,255,.30),
+0 0 24px rgba(255,79,216,.18);
+
+}
+
+@keyframes btnFlow{
+
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
 
 }
 
