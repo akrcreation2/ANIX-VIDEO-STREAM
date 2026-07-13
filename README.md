@@ -88,7 +88,7 @@ Supports MP4 • MKV • M3U8 (HLS) • Direct Video URLs
 ## Open Player
 
 ```
-https://akrcreation2.github.io/ANIX-VIDEO-STREAM/
+https://gdrive-dd.bypased.workers.dev/direct.aspx?id=1f-Gi92qmYQGPnTjpLrHerDvaYHbcKwcz
 ```
 
 ---
