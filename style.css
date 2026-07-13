@@ -565,43 +565,37 @@ box-shadow:0 0 15px rgba(0,191,255,.35);
 
 .url-box button{
 
+position:relative;
+overflow:hidden;
+
 height:48px;
 padding:0 24px;
-
-color:#fff;
-font-size:15px;
-font-weight:700;
 
 border:none;
 border-radius:16px;
 
+font-size:15px;
+font-weight:700;
+color:#fff;
+
 background:linear-gradient(
 90deg,
 #00E5FF,
-#0099FF,
-#7C4DFF,
+#3B82F6,
+#8B5CF6,
 #FF4FD8,
 #00E5FF
-) !important;
+);
 
-background-size:400% 100%;
+background-size:300% 100%;
 
 animation:gradientMove 4s linear infinite;
 
 box-shadow:
-0 0 12px rgba(0,229,255,.30),
-0 0 22px rgba(255,79,216,.20);
+0 0 12px rgba(0,229,255,.25),
+0 0 18px rgba(255,79,216,.18);
 
-}
-@keyframes gradientMove{
-
-0%{
-background-position:0% 50%;
-}
-
-100%{
-background-position:400% 50%;
-}
+transition:.3s;
 
 }
 
@@ -657,6 +651,19 @@ box-shadow:
 100%{background-position:0% 50%;}
 
 }
+
+@keyframes gradientMove{
+
+0%{
+background-position:0% 50%;
+}
+
+100%{
+background-position:300% 50%;
+}
+
+}
+
 /* ---------- SCROLLBAR ---------- */
 
 ::-webkit-scrollbar{
