@@ -565,30 +565,44 @@ box-shadow:0 0 15px rgba(0,191,255,.35);
 
 .url-box button{
 
-height:48px;
-padding:0 24px;
+position:relative;
 
-border-radius:14px;
+overflow:hidden;
 
-color:#fff;
+}
 
-font-weight:700;
+.url-box button::before{
+
+content:"";
+
+position:absolute;
+
+top:0;
+left:-120%;
+
+width:60%;
+height:100%;
 
 background:linear-gradient(
-135deg,
-#00F5FF,
-#3B82F6,
-#8B5CF6,
-#FF4FD8
-) !important;
+90deg,
+transparent,
+rgba(255,255,255,.45),
+transparent
+);
 
-background-size:300% 300%;
+transform:skewX(-25deg);
 
-animation:btnFlow 6s linear infinite;
+animation:shine 2.5s infinite;
 
-box-shadow:
-0 0 10px rgba(0,245,255,.30),
-0 0 18px rgba(255,79,216,.18) !important;
+}
+
+@keyframes shine{
+
+100%{
+
+left:170%;
+
+}
 
 }
 
