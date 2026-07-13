@@ -868,3 +868,43 @@ z-index:9999;
 
 }
 
+.app.fullscreen .topbar,
+.app.fullscreen .url-box{
+
+display:none !important;
+
+}
+
+.app.fullscreen .player-box{
+
+position:fixed !important;
+
+top:0;
+left:0;
+
+width:100vw !important;
+height:100vh !important;
+
+z-index:999999;
+
+background:#000;
+
+}
+
+.app.fullscreen #player{
+
+width:100%;
+height:100%;
+
+object-fit:contain;
+
+}
+
+.app.fullscreen .controls,
+.app.fullscreen .center-controls,
+.app.fullscreen .video-title{
+
+z-index:999999;
+
+}
+
