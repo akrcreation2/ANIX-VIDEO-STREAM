@@ -110,18 +110,12 @@ hls.loadSource(url);
 
 hls.attachMedia(player);
 
-hls.on(Hls.Events.MANIFEST_PARSED, () => {
-
-    console.log("Levels:", hls.levels);
-
-    console.table(hls.levels);
+hls.on(Hls.Events.MANIFEST_PARSED, async () => {
 
     await player.play();
-
-await initAudioBoost();
+    await initAudioBoost();
 
 });
-
 hls.on(Hls.Events.AUDIO_TRACKS_UPDATED, () => {
 
     console.log("Audio Tracks:", hls.audioTracks);
