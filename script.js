@@ -82,7 +82,7 @@ async function initAudioBoost(){
 
 }
 
-loadBtn.onclick=()=>{
+loadBtn.onclick = async () => {
 
 const url=urlInput.value.trim();
 
@@ -116,13 +116,9 @@ hls.on(Hls.Events.MANIFEST_PARSED, () => {
 
     console.table(hls.levels);
 
-    player.play();
+    await player.play();
 
-    initAudioBoost();
-    
-    if(audioContext){
-    audioContext.resume();
-};
+await initAudioBoost();
 
 });
 
@@ -142,7 +138,7 @@ hls.on(Hls.Events.SUBTITLE_TRACKS_UPDATED, () => {
 
 player.src = url;
 
-player.play();
+await player.play();
 
 await initAudioBoost();
 
@@ -152,7 +148,7 @@ await initAudioBoost();
 
 player.src = url;
 
-player.play();
+await player.play();
 
 await initAudioBoost();
 
@@ -161,13 +157,13 @@ await initAudioBoost();
 };
 /* ---------- PLAY / PAUSE ---------- */
 
-playBtn.onclick = () => {
+playBtn.onclick = async () => {
 
     if (player.paused) {
 
-        player.play();
+        await player.play();
 
-    initAudioBoost();
+await initAudioBoost();
 
 if(audioContext){
     audioContext.resume();
