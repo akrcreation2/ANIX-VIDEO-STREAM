@@ -34,6 +34,9 @@ const subtitleTrack = document.getElementById("subtitleTrack");
 const subtitleFile = document.getElementById("subtitleFile");
 
 let hls = null;
+let audioContext;
+let sourceNode;
+let gainNode;
 let hideTimer;
 
 function formatTime(sec){
@@ -53,6 +56,24 @@ return `${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
 return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
 
 }
+
+function initAudioBoost(){
+
+    if(audioContext) return;
+
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    sourceNode = audioContext.createMediaElementSource(player);
+
+    gainNode = audioContext.createGain();
+
+    gainNode.gain.value = 1;
+
+    sourceNode.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+}
+
 loadBtn.onclick=()=>{
 
 const url=urlInput.value.trim();
@@ -89,6 +110,12 @@ hls.on(Hls.Events.MANIFEST_PARSED, () => {
 
     player.play();
 
+    initAudioBoost();
+    
+    if(audioContext){
+    audioContext.resume();
+};
+
 });
 
 hls.on(Hls.Events.AUDIO_TRACKS_UPDATED, () => {
@@ -105,22 +132,29 @@ hls.on(Hls.Events.SUBTITLE_TRACKS_UPDATED, () => {
 
 }else{
 
-player.src=url;
+player.src = url;
 
 player.play();
+
+initAudioBoost();
+
+audioContext.resume();
 
 }
-
+    
 }else{
 
-player.src=url;
+player.src = url;
 
 player.play();
+
+initAudioBoost();
+
+audioContext.resume();
 
 }
 
 };
-
 /* ---------- PLAY / PAUSE ---------- */
 
 playBtn.onclick = () => {
@@ -129,6 +163,12 @@ playBtn.onclick = () => {
 
         player.play();
 
+    initAudioBoost();
+
+if(audioContext){
+    audioContext.resume();
+}
+        
     } else {
 
         player.pause();
@@ -195,10 +235,9 @@ forwardBtn.onclick = () => {
 
 volumeBtn.onclick = () => {
 
-    volumeSlider.style.display =
-        volumeSlider.style.display === "block"
-        ? "none"
-        : "block";
+    settingsMenu.style.display = "block";
+
+    showBoostMenu();
 
 };
 
@@ -506,6 +545,48 @@ function showSubtitleMenu(){
     };
 
     box.appendChild(local);
+
+    settingsContent.appendChild(box);
+
+}
+
+/* ---------- BOOST ---------- */
+function showBoostMenu(){
+
+    settingsContent.innerHTML = "";
+
+    const title = document.createElement("h3");
+    title.textContent = "🔊 Volume Boost";
+    title.style.marginBottom = "10px";
+    title.style.textAlign = "center";
+
+    settingsContent.appendChild(title);
+
+    const box = document.createElement("div");
+    box.className = "settings-list";
+
+    [1,1.25,1.5,2,3,4,5].forEach(level=>{
+
+        const btn = document.createElement("button");
+
+        btn.textContent =
+            level==1 ? "100% (Normal)" : (level*100)+"%";
+
+        btn.onclick = async ()=>{
+
+    initAudioBoost();
+
+    if(audioContext){
+    await audioContext.resume();
+}
+
+    gainNode.gain.value = level;
+
+};
+
+        box.appendChild(btn);
+
+    });
 
     settingsContent.appendChild(box);
 
