@@ -144,9 +144,7 @@ player.src = url;
 
 player.play();
 
-initAudioBoost();
-
-audioContext.resume();
+await initAudioBoost();
 
 }
     
@@ -156,9 +154,7 @@ player.src = url;
 
 player.play();
 
-initAudioBoost();
-
-audioContext.resume();
+await initAudioBoost();
 
 }
 
@@ -592,11 +588,7 @@ function showBoostMenu(){
 
 };
 
-    gainNode.gain.value = level;
-
-};
-
-        box.appendChild(btn);
+box.appendChild(btn);
 
     });
 
