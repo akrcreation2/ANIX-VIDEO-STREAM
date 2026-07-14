@@ -57,20 +57,28 @@ return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
 
 }
 
-function initAudioBoost(){
+async function initAudioBoost(){
 
-    if(audioContext) return;
+    if(!audioContext){
 
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    sourceNode = audioContext.createMediaElementSource(player);
+        sourceNode = audioContext.createMediaElementSource(player);
 
-    gainNode = audioContext.createGain();
+        gainNode = audioContext.createGain();
 
-    gainNode.gain.value = 1;
+        gainNode.gain.value = 1;
 
-    sourceNode.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+        sourceNode.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+    }
+
+    if(audioContext.state === "suspended"){
+
+        await audioContext.resume();
+
+    }
 
 }
 
@@ -233,7 +241,9 @@ forwardBtn.onclick = () => {
 
 /* ---------- VOLUME ---------- */
 
-volumeBtn.onclick = () => {
+volumeBtn.onclick = (e) => {
+
+    e.stopPropagation();
 
     settingsMenu.style.display = "block";
 
@@ -572,13 +582,15 @@ function showBoostMenu(){
         btn.textContent =
             level==1 ? "100% (Normal)" : (level*100)+"%";
 
-        btn.onclick = async ()=>{
+        btn.onclick = async () => {
 
-    initAudioBoost();
+    await initAudioBoost();
 
-    if(audioContext){
-    await audioContext.resume();
-}
+    gainNode.gain.value = level;
+
+    settingsMenu.style.display = "none";
+
+};
 
     gainNode.gain.value = level;
 
@@ -603,9 +615,9 @@ document.addEventListener("click",(e)=>{
 
 if(
 !settingsMenu.contains(e.target) &&
-!settingsBtn.contains(e.target)
+!settingsBtn.contains(e.target) &&
+!volumeBtn.contains(e.target)
 ){
-
 settingsMenu.style.display="none";
 
 }
