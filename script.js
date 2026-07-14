@@ -57,9 +57,9 @@ return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
 
 }
 
-async function initAudioBoost(){
+async function initAudioBoost() {
 
-    if(!audioContext){
+    if (!audioContext) {
 
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -72,14 +72,15 @@ async function initAudioBoost(){
         sourceNode.connect(gainNode);
         gainNode.connect(audioContext.destination);
 
+        // IMPORTANT
+        player.muted = false;
+        player.volume = 1;
+
     }
 
-    if(audioContext.state === "suspended"){
-
+    if (audioContext.state === "suspended") {
         await audioContext.resume();
-
     }
-
 }
 
 loadBtn.onclick = async () => {
